@@ -5,7 +5,7 @@ import database.*;
 import static database.DatabaseAccessor.CONNECTION;
 import java.sql.SQLException;
 import java.sql.Statement;
-import payment.CreditCard;
+
 /**
  * Models a user
  * A user has a payment card and an optional email address
@@ -80,7 +80,7 @@ public class User implements Persistable {
 
     @Override
     public boolean persist() {
-        final String QUERY = "INSERT INTO user VALUES('" + getEmailAddress() + "'," + getPaymentCard().getCardNumber() + ");";
+        final String QUERY = "INSERT INTO user VALUES('" + getEmailAddress() + "','" + getPaymentCard().getCardNumber() + "');";
         try {
             Statement statement = CONNECTION.createStatement();
             statement.executeUpdate(QUERY);
@@ -90,13 +90,5 @@ public class User implements Persistable {
         }
         return false;
     }
-    
-    private static void retrieveAll() {
-        
-    }
-    public static void main(String[] args) {
-//        CreditCard thomasCard = new CreditCard();
-//        thomasCard.setCardNumber();
-//        User thomas = new User()
-    }
+  
 }
