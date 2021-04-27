@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.*;
@@ -11,7 +12,9 @@ import javafx.scene.image.*;
 import main.Movie;
 import javafx.scene.text.*;
 import java.util.*;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 
 public class MovieListController implements Initializable {
@@ -127,8 +130,8 @@ public class MovieListController implements Initializable {
         loadMovies(currentIndex - MOVIES_PER_PAGE, currentIndex);
     }
     
-    private void navigateToMovieDetails(Movie movie) {
-        
+    private void navigateToMovieDetails(Movie movie) throws IOException{
+            
     }
     
 
