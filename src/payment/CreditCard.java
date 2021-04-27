@@ -26,7 +26,7 @@ public class CreditCard extends PaymentCard {
 
     @Override
     public boolean persist() {
-        final String QUERY = "INSERT INTO debit_card VALUES(" + getCardNumber() + ", '"
+        final String QUERY = "INSERT INTO debit_card VALUES('" + getCardNumber() + "', '"
                 + getCardName() + "', " + getBalance() + ", '" + getExpiryDate()+ "', "
                 + getPin() + ", " + getCreditLimit() + ");";
         try {
