@@ -16,7 +16,7 @@ public class DebitCard extends PaymentCard {
 
     @Override
     public boolean persist() {
-        final String QUERY = "INSERT INTO debit_card VALUES(" + getCardNumber() + ", '"
+        final String QUERY = "INSERT INTO debit_card VALUES('" + getCardNumber() + "', '"
                 + getCardName() + "', " + getBalance() + ", '" + getExpiryDate()+ "', "
                 + getPin() + ");";
         try {
@@ -27,18 +27,6 @@ public class DebitCard extends PaymentCard {
             ex.printStackTrace();
         }
         return false;
-    }
-    
-    public static void main(String[] args) {
-        DebitCard myCard = new DebitCard();
-        myCard.setCardNumber("4383755000308625");
-        myCard.setExpiryDate(LocalDate.now());
-        myCard.setPin(1234);
-        myCard.setBalance(22200);
-        
-        if(isValidCard(myCard)) {
-            myCard.persist();
-        }
     }
 
 }
