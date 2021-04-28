@@ -76,4 +76,13 @@ public class MovieCartController implements Initializable {
         }
     }
     
+    @FXML
+    /**
+     * Navigates to the payment UI
+     * 
+     */
+    public void navigateToPayment() {
+        
+    }
+    
 }
