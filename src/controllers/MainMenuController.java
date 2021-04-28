@@ -24,6 +24,9 @@ import javafx.stage.Stage;
 public class MainMenuController implements Initializable {
     
     @FXML
+    AnchorPane rootPane;
+    
+    @FXML
     private Button btnRent;
     
     @FXML
@@ -38,14 +41,31 @@ public class MainMenuController implements Initializable {
     }
     
     @FXML
+    /**
+     * Navigates to the movie list UI
+     */
     public void navigateToMovieList() throws IOException {
-            AnchorPane rootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/MovieList.fxml"));
-            Scene scene = new Scene(rootPane, 720, 600);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.setTitle("Movie List");
-            stage.setResizable(false);
-            stage.show();
+        AnchorPane movieListRootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/MovieList.fxml"));
+        Scene scene = new Scene(movieListRootPane, 720, 600);
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Movie List");
+        stage.setResizable(false);
+        stage.show();
         
+    }
+    
+    @FXML
+    /**
+     * Navigates to the user registration UI
+     */
+    public void navigateToRegistration() throws IOException {
+        AnchorPane registrationRootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/UserRegistration.fxml"));
+        Scene scene = new Scene(registrationRootPane, 720, 600);
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("User Registration");
+        stage.setResizable(false);
+        stage.show();
     }
 }
