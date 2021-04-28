@@ -10,7 +10,7 @@ public class DebitCard extends PaymentCard {
         super();
     }
 
-    public DebitCard(String cardNumber, String cardName, LocalDate expiryDate, int pin, double balance) {
+    public DebitCard(String cardNumber, String cardName, String expiryDate, String pin, double balance) {
         super(cardNumber, cardName, expiryDate, pin, balance);
     }
 
