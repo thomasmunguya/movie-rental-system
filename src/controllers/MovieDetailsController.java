@@ -109,6 +109,7 @@ public class MovieDetailsController implements Initializable {
         txtTitle.setText(movie.getTitle());
         txtDirector.setText(movie.getDirector());
         imgViewCover.setImage(movie.getImage());
+        txtDescription.setText(movie.getDescription());
     }
     
 }
