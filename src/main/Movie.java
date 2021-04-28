@@ -24,6 +24,7 @@ public class Movie implements Retrievable {
     private Image image;
     private String pathToImage;
     private String description;
+    private double rentalPrice;
 
     /**
      * Constructs a movie
@@ -50,7 +51,8 @@ public class Movie implements Retrievable {
      */
     public Movie(String title, String actors, String director, double rating,
                  int lengthInMinutes, List<Disc> discs, MovieGenre genre, boolean available,
-                 LocalDate releaseDate, Image image, String pathToImage, String description) {
+                 LocalDate releaseDate, Image image, String pathToImage, String description,
+                 double rentalPrice) {
         this.title = title;
         this.actors = actors;
         this.director = director;
@@ -63,6 +65,7 @@ public class Movie implements Retrievable {
         this.image = image;
         this.pathToImage = pathToImage;
         this.description = description;
+        this.rentalPrice = rentalPrice;
     }
 
     public String getTitle() {
@@ -160,6 +163,14 @@ public class Movie implements Retrievable {
     public void setDescrition(String description) {
         this.description = description;
     }
+    
+    public double getRentalPrice() {
+        return this.rentalPrice;
+    }
+    
+    public void setRentalPrice(double rentalPrice) {
+        this.rentalPrice = rentalPrice;
+    }
 
     public static List<Movie> retrieveAll() {
         final String QUERY = "SELECT * FROM movie";
@@ -182,6 +193,7 @@ public class Movie implements Retrievable {
                 movie.setPathToImage(retrievedMoviesRS.getString("path_to_image"));
                 movie.setImage(new Image(retrievedMoviesRS.getString("path_to_image")));
                 movie.setDescrition(retrievedMoviesRS.getString("description"));
+                movie.setRentalPrice(Double.parseDouble(retrievedMoviesRS.getString("rental_price")));
                 retrievedMovies.add(movie);
             }
         }catch(SQLException ex) {
