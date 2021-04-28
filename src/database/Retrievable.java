@@ -12,5 +12,5 @@ public interface Retrievable extends DatabaseAccessor {
      * @param query the query to pass to the database
      * @return the object retrieved
      */
-    public abstract Object retrieve();
+    public abstract Retrievable retrieve();
 }
