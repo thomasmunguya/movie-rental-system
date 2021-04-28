@@ -1,9 +1,12 @@
 package payment;
 
+import static database.DatabaseAccessor.CONNECTION;
 import database.Persistable;
-
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.*;
-import java.util.Random;
+import java.util.*;
+import main.Movie;
 
 /**
  * Models a receipt
@@ -11,18 +14,17 @@ import java.util.Random;
 public class Receipt implements Persistable {
     private LocalDate issueDate;
     private Instant issueTime;
-    private String details;
-    private int receiptNumber;
+    private String receiptNumber;
+    private Map<Movie, Double> items;
 
     public Receipt() {
-
+        this.receiptNumber = generateReceiptNumber();
     }
 
-    public Receipt(LocalDate issueDate, Instant issueTime, String details, int receiptNumber) {
+    public Receipt(LocalDate issueDate, Instant issueTime, String details) {
         this.issueDate = issueDate;
         this.issueTime = issueTime;
-        this.details = details;
-        this.receiptNumber = receiptNumber;
+        this.receiptNumber = generateReceiptNumber();
     }
 
     public LocalDate getIssueDate() {
@@ -41,34 +43,48 @@ public class Receipt implements Persistable {
         this.issueTime = issueTime;
     }
 
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public int getReceiptNumber() {
+    public String getReceiptNumber() {
         return receiptNumber;
     }
 
-    public void setReceiptNumber(int receiptNumber) {
-        this.receiptNumber = receiptNumber;
+    public Map<Movie, Double> getItems() {
+        return items;
     }
-
+    
+    public void setItems(Map<Movie, Double> items) {
+        this.items = items;
+    }
+    
     @Override
     public boolean persist() {
-//        Timestamp timestamp = Timestamp.from(getIssueTime());
-//        String QUERY = "INSERT INTO receipt VALUES('" + getIssueDate() + timestamp.
-        return true;
+       final String QUERY = "INSERT INTO receipt VALUES('" + getReceiptNumber() +
+                 "','" + getIssueDate() + "', '" + getIssueTime() + "');";
+        final String RECEIPT_NUMBER = getReceiptNumber();
+        try {
+            Statement statement = CONNECTION.createStatement();
+            statement.executeUpdate(QUERY);
+            getItems().forEach((movie, rentalFee) -> {
+                final String QUERY2 = "INSERT INTO receipt_items VALUES('" + RECEIPT_NUMBER
+                        + "', 'Movie: " + movie.getTitle() + "');";
+                try {
+                    statement.executeUpdate(QUERY2);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
     /**
      * Generates a random 10 digit receipt number
      * @return the receipt number
      */
-    public int generateReceiptNumber() {
+    private String generateReceiptNumber() {
         final int RECEIPT_NUMBER_LENGTH = 10;
         Random rand = new Random();
         String receiptNumberString = "1234567890";
@@ -76,7 +92,7 @@ public class Receipt implements Persistable {
         for(int i = 0; i < RECEIPT_NUMBER_LENGTH; i++) {
             receiptNumberSb.append(receiptNumberString.charAt(rand.nextInt(RECEIPT_NUMBER_LENGTH)));
         }
-        return Integer.parseInt(receiptNumberSb.toString());
+        return receiptNumberSb.toString();
     }
 
     @Override
@@ -99,4 +115,5 @@ public class Receipt implements Persistable {
 
         return true;
     }
+    
 }
