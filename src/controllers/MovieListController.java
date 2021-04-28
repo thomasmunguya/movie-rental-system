@@ -10,6 +10,8 @@ import javafx.scene.image.*;
 import main.Movie;
 import javafx.scene.text.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -96,6 +98,13 @@ public class MovieListController implements Initializable {
                imgViewMovieCover.setFitWidth(200);
                imgViewMovieCover.setFitHeight(300);
                imgViewMovieCover.setSmooth(true);
+               imgViewMovieCover.setOnMouseReleased((event) -> {
+                   try {
+                       navigateToMovieDetails(movieList.get(0));
+                   } catch (IOException ex) {
+                       ex.printStackTrace();
+                   }
+               });
                
               Text txtMovieTitle = new Text(movieList.get(i).getTitle());
               txtMovieTitle.setFont(Font.font("Berlin Sans FB", 12));
