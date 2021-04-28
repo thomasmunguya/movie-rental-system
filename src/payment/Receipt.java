@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.time.*;
 import java.util.*;
 import main.Movie;
+import main.Rental;
 
 /**
  * Models a receipt
@@ -109,7 +110,7 @@ public class Receipt implements Persistable {
             return false;
         }
 
-        if(this.getReceiptNumber() != ((Receipt) other).getReceiptNumber()) {
+        if(!this.getReceiptNumber().equals(((Receipt) other).getReceiptNumber())) {
             return false;
         }
 
