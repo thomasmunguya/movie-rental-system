@@ -11,15 +11,15 @@ import java.util.*;
 public abstract class PaymentCard implements Persistable {
     private String cardNumber;
     private String cardName;
-    private LocalDate expiryDate;
-    private int pin;
+    private String expiryDate;
+    private String pin;
     private double balance;
 
     public PaymentCard() {
 
     }
 
-    public PaymentCard(String cardNumber, String cardName, LocalDate expiryDate, int pin, double balance) {
+    public PaymentCard(String cardNumber, String cardName, String expiryDate, String pin, double balance) {
         this.cardNumber = cardNumber;
         this.cardName = cardName;
         this.expiryDate = expiryDate;
