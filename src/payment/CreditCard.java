@@ -11,7 +11,7 @@ public class CreditCard extends PaymentCard {
         super();
     }
 
-    public CreditCard(String cardNumber, String cardName, LocalDate expiryDate, int pin, double balance, double creditLimit) {
+    public CreditCard(String cardNumber, String cardName, String expiryDate, String pin, double balance, double creditLimit) {
         super(cardNumber, cardName, expiryDate, pin, balance);
         this.creditLimit = creditLimit;
     }
