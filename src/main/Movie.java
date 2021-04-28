@@ -23,6 +23,7 @@ public class Movie implements Retrievable {
     private LocalDate releaseDate;
     private Image image;
     private String pathToImage;
+    private String description;
 
     /**
      * Constructs a movie
@@ -34,21 +35,22 @@ public class Movie implements Retrievable {
     /**
      * Constructs a movie with a given title, actors, director, rating, length, discs, genre, availability,
      * release date, image and path to image
-     * @param title
-     * @param actors
-     * @param director
-     * @param rating
-     * @param lengthInMinutes
-     * @param discs
-     * @param genre
-     * @param available
-     * @param releaseDate
-     * @param image
-     * @param pathToImage
+     * @param title the title of the movie
+     * @param actors the actors of the movie
+     * @param director the director of the movie
+     * @param rating the rating of the movie
+     * @param lengthInMinutes the length of the movie in minutes
+     * @param discs the discs associated with the movie
+     * @param genre the genre of the movie
+     * @param available the availability of the movie, true if available and false otherwise
+     * @param releaseDate the release date of the movie
+     * @param image the cover image associated with the movie
+     * @param pathToImage the path to the cover image of the movie
+     * @param description the description of the movie
      */
     public Movie(String title, String actors, String director, double rating,
                  int lengthInMinutes, List<Disc> discs, MovieGenre genre, boolean available,
-                 LocalDate releaseDate, Image image, String pathToImage) {
+                 LocalDate releaseDate, Image image, String pathToImage, String description) {
         this.title = title;
         this.actors = actors;
         this.director = director;
@@ -60,6 +62,7 @@ public class Movie implements Retrievable {
         this.releaseDate = releaseDate;
         this.image = image;
         this.pathToImage = pathToImage;
+        this.description = description;
     }
 
     public String getTitle() {
@@ -149,6 +152,14 @@ public class Movie implements Retrievable {
     public void setPathToImage(String pathToImage) {
         this.pathToImage = pathToImage;
     }
+    
+    public String getDescription() {
+        return this.description;
+    }
+    
+    public void setDescrition(String description) {
+        this.description = description;
+    }
 
     public static List<Movie> retrieveAll() {
         final String QUERY = "SELECT * FROM movie";
@@ -170,7 +181,7 @@ public class Movie implements Retrievable {
                 movie.setAvailable(Boolean.getBoolean(retrievedMoviesRS.getString("available")));
                 movie.setPathToImage(retrievedMoviesRS.getString("path_to_image"));
                 movie.setImage(new Image(retrievedMoviesRS.getString("path_to_image")));
-                System.out.println(movie.getImage().getHeight());
+                movie.setDescrition(retrievedMoviesRS.getString("description"));
                 retrievedMovies.add(movie);
             }
         }catch(SQLException ex) {
