@@ -276,6 +276,7 @@ public class MovieListController implements Initializable {
     @FXML
     /**
      * Navigates to the main menu
+     * @throws IOException if the view file cannot be loaded
      */
     public void navigateToMainMenu() throws IOException {
         AnchorPane mainMenuRootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/MainMenu.fxml"));
