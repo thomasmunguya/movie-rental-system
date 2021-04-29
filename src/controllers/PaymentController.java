@@ -5,37 +5,18 @@
  */
 package controllers;
 
-import disc.Disc;
-import disc.DiscTag;
+import disc.*;
 import java.io.IOException;
 import java.net.URL;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.*;
+import java.util.*;
 import javafx.fxml.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import main.Movie;
-import main.Rental;
-import main.User;
-import payment.CreditCard;
-import payment.DebitCard;
-import payment.PaymentCard;
-import payment.PaymentCardType;
-import payment.Receipt;
+import javafx.stage.*;
+import main.*;
+import payment.*;
 
 /**
  *
@@ -90,6 +71,9 @@ public class PaymentController implements Initializable {
 
     @FXML
     private Button btnPay;
+    
+    @FXML
+    private AnchorPane rootPane;
 
     private static final Alert ALERT = new Alert(Alert.AlertType.ERROR);
     
@@ -328,7 +312,7 @@ public class PaymentController implements Initializable {
      * Shows the PIN request pop up window
      * @throws IOException if the view file cannot be loaded
      */
-    public void showPinRequestWindow() throws IOException {
+    private void showPinRequestWindow() throws IOException {
         AnchorPane pinRequestRootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/PinRequest.fxml"));
         Scene scene = new Scene(pinRequestRootPane);
         Stage stage = new Stage();
@@ -337,6 +321,21 @@ public class PaymentController implements Initializable {
         stage.setResizable(false);
         stage.initModality(Modality.WINDOW_MODAL);
         stage.showAndWait();
+    }
+    
+    @FXML
+    /**
+     * Navigates to movie cart
+     * @throws IOException if the view file cannot not be loaded
+     */
+    public void navigateToMovieCart() throws IOException {
+        AnchorPane movieCartrootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/MovieCart.fxml"));
+        Scene scene = new Scene(movieCartrootPane, 720, 600);
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Movie Cart");
+        stage.setResizable(false);
+        stage.show();
     }
  
 }
