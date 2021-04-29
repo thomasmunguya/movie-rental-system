@@ -100,7 +100,7 @@ public class User implements Persistable, Retrievable {
             ResultSet retrievedUserRS = statement.executeQuery(QUERY);
             if(retrievedUserRS.next()) {
                 User user = new User();
-                user.setEmailAddress(retrievedUserRS.getString("email"));
+                user.setEmailAddress(retrievedUserRS.getString("email_address"));
                 if(PaymentCard.retrievePaymentCardType(retrievedUserRS.
                         getString("payment_card_number")).equals(PaymentCardType
                                 .CREDIT_CARD.toString())) {
@@ -128,12 +128,6 @@ public class User implements Persistable, Retrievable {
         return null;
     }
     
-    
-
-    @Override
-    public List<Retrievable> retrieveAll() {
-       return null;
-    }
     
    
 }

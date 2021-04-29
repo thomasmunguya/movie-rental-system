@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.*;
 import java.util.*;
-import main.Movie;
-import main.Rental;
 
 /**
  * Models a receipt
@@ -16,7 +14,7 @@ public class Receipt implements Persistable {
     private LocalDate issueDate;
     private Instant issueTime;
     private String receiptNumber;
-    private Map<Movie, Double> items;
+    private Map<String, Double> items;
 
     public Receipt() {
         this.receiptNumber = generateReceiptNumber();
@@ -48,11 +46,11 @@ public class Receipt implements Persistable {
         return receiptNumber;
     }
 
-    public Map<Movie, Double> getItems() {
+    public Map<String, Double> getItems() {
         return items;
     }
     
-    public void setItems(Map<Movie, Double> items) {
+    public void setItems(Map<String, Double> items) {
         this.items = items;
     }
     
@@ -64,9 +62,9 @@ public class Receipt implements Persistable {
         try {
             Statement statement = CONNECTION.createStatement();
             statement.executeUpdate(QUERY);
-            getItems().forEach((movie, rentalFee) -> {
+            getItems().forEach((item, fee) -> {
                 final String QUERY2 = "INSERT INTO receipt_items VALUES('" + RECEIPT_NUMBER
-                        + "', 'Movie: " + movie.getTitle() + "');";
+                        + "', 'Item: " + item + "');";
                 try {
                     statement.executeUpdate(QUERY2);
                 } catch (SQLException ex) {

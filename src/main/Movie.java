@@ -1,5 +1,6 @@
 package main;
 
+import database.*;
 import disc.*;
 import javafx.scene.image.*;
 import java.sql.*;
@@ -10,8 +11,9 @@ import java.time.*;
  * Models a movie
  */
 import database.Retrievable;
-public class Movie implements Retrievable {
+public class Movie implements Retrievable, Persistable {
 
+    private String id;
     private String title;
     private String actors;
     private String director;
@@ -49,10 +51,11 @@ public class Movie implements Retrievable {
      * @param pathToImage the path to the cover image of the movie
      * @param description the description of the movie
      */
-    public Movie(String title, String actors, String director, double rating,
+    public Movie(String id, String title, String actors, String director, double rating,
                  int lengthInMinutes, List<Disc> discs, MovieGenre genre, boolean available,
                  LocalDate releaseDate, Image image, String pathToImage, String description,
                  double rentalPrice) {
+        this.id = id;
         this.title = title;
         this.actors = actors;
         this.director = director;
@@ -68,6 +71,14 @@ public class Movie implements Retrievable {
         this.rentalPrice = rentalPrice;
     }
 
+    public String getId() {
+        return this.id;
+    }
+    
+    public void setId(String id) {
+        this.id = id;
+    }
+    
     public String getTitle() {
         return title;
     }
@@ -173,7 +184,7 @@ public class Movie implements Retrievable {
     }
 
     public static List<Movie> retrieveAll() {
-        final String QUERY = "SELECT * FROM movie";
+        final String QUERY = "SELECT * FROM movie;";
 
         final List<Movie> retrievedMovies = new ArrayList<>();
         try {
@@ -182,7 +193,7 @@ public class Movie implements Retrievable {
             while(retrievedMoviesRS.next()) {
                 Movie movie = new Movie();
                 movie.setTitle(retrievedMoviesRS.getString("title"));
-                movie.setDiscs(retrieveDiscsAssignedToMovie(retrievedMoviesRS.getString("title")));
+                movie.setDiscs(retrieveDiscsAssignedToMovie(retrievedMoviesRS.getString("id")));
                 movie.setRating(retrievedMoviesRS.getDouble("rating"));
                 movie.setActors(retrievedMoviesRS.getString("actors"));
                 movie.setDirector(retrievedMoviesRS.getString("director"));
@@ -208,9 +219,10 @@ public class Movie implements Retrievable {
      * @param title the title of movie whose discs to retrieve
      * @return a list of discs
      */
-    private static List<Disc> retrieveDiscsAssignedToMovie(String title) {
-        final String QUERY = "SELECT * FROM disc LEFT JOIN movie ON " +
-                "disc.movie_id = movie.id WHERE movie.title = ' " + title + "';";
+    private static List<Disc> retrieveDiscsAssignedToMovie(String movieId) {
+        System.out.println("Movie ID: " + movieId);
+        final String QUERY = "SELECT * FROM disc LEFT JOIN movie_discs"
+                + " ON movie_discs.disc_id = disc.id WHERE movie_discs.movie_id = '" + movieId + "';";
         final List<Disc> discsAssignedToMovie = new ArrayList<>();
         try {
             Statement statement = CONNECTION.createStatement();
@@ -218,6 +230,7 @@ public class Movie implements Retrievable {
             while(discsAssignedToMovieRS.next()) {
                 Disc disc = new Disc();
                 disc.setDiscId(discsAssignedToMovieRS.getInt("id"));
+                System.out.println("Disc ID: " + discsAssignedToMovieRS.getInt("id"));
                 disc.setDiscTag(retrieveDiscTag(discsAssignedToMovieRS.getInt("disc_tag_id")));
                 discsAssignedToMovie.add(disc);
             }
@@ -253,7 +266,7 @@ public class Movie implements Retrievable {
      * @return
      */
     private static DiscTag retrieveDiscTag(int id) {
-        final String QUERY = "SELECT * FROM disc_tag WHERE id = " + id;
+        final String QUERY = "SELECT * FROM disc_tag WHERE id = '" + id + "';";
         try {
             Statement statement = CONNECTION.createStatement();
             ResultSet discTagsRS = statement.executeQuery(QUERY);
@@ -268,11 +281,6 @@ public class Movie implements Retrievable {
         }catch(SQLException ex) {
             ex.printStackTrace();
         }
-        return null;
-    }
-
-    @Override
-    public Retrievable retrieve(String query) {
         return null;
     }
 
@@ -302,18 +310,72 @@ public class Movie implements Retrievable {
     }
 
     public static void main(String[] args) {
-        for (Movie movie : Movie.retrieveAll()) {
-            System.out.println("Title: " + movie.getTitle());
-            System.out.println("Actors: " + movie.getActors());
-            System.out.println("Director: " + movie.getDirector());
-            System.out.println("Rating: " + movie.getRating());
-            System.out.println("Length (Minutes): " + movie.getLengthInMinutes());
-            System.out.println("Genre: " + movie.getGenre());
-            System.out.println("Available: " + movie.isAvailable());
-            System.out.println("Release date: " + movie.getReleaseDate());
-            System.out.println("pathToImage: " + movie.getPathToImage());
-        }
+//        for (Movie movie : Movie.retrieveAll()) {
+//            System.out.println("Title: " + movie.getTitle());
+//            System.out.println("Actors: " + movie.getActors());
+//            System.out.println("Director: " + movie.getDirector());
+//            System.out.println("Rating: " + movie.getRating());
+//            System.out.println("Length (Minutes): " + movie.getLengthInMinutes());
+//            System.out.println("Genre: " + movie.getGenre());
+//            System.out.println("Available: " + movie.isAvailable());
+//            System.out.println("Release date: " + movie.getReleaseDate());
+//            System.out.println("pathToImage: " + movie.getPathToImage());
+//        }
 
+    }
+
+    @Override
+    public Retrievable retrieveOne(String columnName, String columnValue) {
+         final String QUERY = "SELECT * FROM movie WHERE '" + columnName + ""
+                 + " = '" + columnValue + "';";
+        try {
+            Statement statement = CONNECTION.createStatement();
+            ResultSet retrievedMoviesRS = statement.executeQuery(QUERY);
+            while(retrievedMoviesRS.next()) {
+                Movie movie = new Movie();
+                movie.setTitle(retrievedMoviesRS.getString("title"));
+                movie.setDiscs(retrieveDiscsAssignedToMovie(retrievedMoviesRS.getString("id")));
+                movie.setRating(retrievedMoviesRS.getDouble("rating"));
+                movie.setActors(retrievedMoviesRS.getString("actors"));
+                movie.setDirector(retrievedMoviesRS.getString("director"));
+                movie.setLengthInMinutes(retrievedMoviesRS.getInt("length_in_minutes"));
+                movie.setGenre(getGenre(retrievedMoviesRS.getString("genre")));
+                movie.setReleaseDate(LocalDate.parse(retrievedMoviesRS.getString("release_date")));
+                movie.setAvailable(Boolean.getBoolean(retrievedMoviesRS.getString("available")));
+                movie.setPathToImage(retrievedMoviesRS.getString("path_to_image"));
+                movie.setImage(new Image(retrievedMoviesRS.getString("path_to_image")));
+                movie.setDescrition(retrievedMoviesRS.getString("description"));
+                movie.setRentalPrice(Double.parseDouble(retrievedMoviesRS.getString("rental_price")));
+                return movie;
+            }
+        }catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean persist() {
+        final String QUERY = "INSERT INTO MOVIE VALUES("
+                + "'" + getId() + "',"
+                + " '" + getTitle() + "',"
+                + " '" + getActors() + "',"
+                + " '" + getDirector()+ "',"
+                + " '" + getRating() + "',"
+                + " '" + getLengthInMinutes() + "',"
+                + " " + getGenre() + "',"
+                + " '" + isAvailable() + "',"
+                + " " + getReleaseDate() +"',"
+                + " '" + getPathToImage() + "')"
+                + " ON DUPLICATE KEY UPDATE"
+                + " available = '" + isAvailable() + "';";
+        try {
+            Statement statement = CONNECTION.createStatement();
+            statement.executeUpdate(QUERY);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return true;
     }
 }
 

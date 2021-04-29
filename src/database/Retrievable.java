@@ -8,9 +8,16 @@ import java.util.List;
 public interface Retrievable extends DatabaseAccessor {
 
     /**
-     * Retrieves objects from the database
-     * @param query the query to pass to the database
+     * Retrieves one object from the database
+     * @param columnName the database column name
+     * @param columnValue the database column value
      * @return the object retrieved
      */
-    public abstract Retrievable retrieve();
+    public abstract Retrievable retrieveOne(String columnName, String columnValue);
+    
+    /**
+     * Retrieves all objects from the database
+     * @return the objects retrieved
+     */
+//    public abstract List<Retrievable> retrieveAll();
 }

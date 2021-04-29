@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import static java.lang.Integer.min;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.*;
@@ -12,6 +13,8 @@ import javafx.scene.text.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static java.util.stream.Collectors.toMap;
+import java.util.stream.IntStream;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -61,6 +64,9 @@ public class MovieListController implements Initializable {
     @FXML
     private Pagination paginationMovieList;
     
+    @FXML
+    private AnchorPane movieListPane;
+    
     private static int currentIndex = 0;
     private static int pageNumber = 0;
     private static List<Movie> movieList;
@@ -70,9 +76,37 @@ public class MovieListController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources){
           movieList = Movie.retrieveAll();
-          loadMovies();
+//          loadMovies();
 //          navigateToNextPage();
 //          setUpPageNavigationButtons();
+          partition(movieList, 2).forEach((t, movies) -> {
+                ImageView imgViewMovieCover = new ImageView(movies.get(0).getImage());
+               imgViewMovieCover.setFitWidth(200);
+               imgViewMovieCover.setFitHeight(300);
+               imgViewMovieCover.setSmooth(true);
+               
+               imgViewMovieCover.setOnMouseReleased((event) -> {
+                   try {
+                       navigateToMovieDetails(movieList.get(0));
+                   } catch (IOException ex) {
+                       ex.printStackTrace();
+                   }
+               });
+               Text txtMovieTitle = new Text(movieList.get(0).getTitle());
+              txtMovieTitle.setFont(Font.font("Berlin Sans FB", 12));
+              txtMovieTitle.setTextAlignment(TextAlignment.CENTER);
+              txtMovieTitle.setFill(Paint.valueOf("WHITE"));
+              txtMovieTitle.setWrappingWidth(100);
+              
+              HBox movieCoversPane = new HBox(20);
+            movieCoversPane.setPrefWidth(720);
+            movieCoversPane.setPrefHeight(391);
+
+              VBox vBoxCoverAndTitle = new VBox();
+              vBoxCoverAndTitle.getChildren().addAll(imgViewMovieCover, txtMovieTitle);
+              movieCoversPane.getChildren().add(vBoxCoverAndTitle);
+              rootPane.getChildren().add(movieCoversPane);
+          });
     }
     
     /**
@@ -211,6 +245,14 @@ public class MovieListController implements Initializable {
 //        }
             
     }
+    
+    public Map<Integer, List<Movie>> partition(List<Movie> list, int pageSize) {
+    return IntStream.iterate(0, i -> i + pageSize)
+          .limit((list.size() + pageSize - 1) / pageSize)
+          .boxed()
+          .collect(toMap(i -> i / pageSize,
+                         i -> list.subList(i, min(i + pageSize, list.size()))));
+}
     
     @FXML
     /**

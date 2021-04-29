@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PaymentController">
    <children>
       <SplitPane dividerPositions="0.1518624641833811" orientation="VERTICAL" prefHeight="700.0" prefWidth="750.0" stylesheets="@movies.css">
          <items>
@@ -68,7 +68,7 @@
                               <Font size="22.0" />
                            </font>
                         </Button>
-                        <Button fx:id="bt5" layoutX="58.0" layoutY="57.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="5">
+                        <Button fx:id="btn5" layoutX="58.0" layoutY="57.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="5">
                            <font>
                               <Font size="22.0" />
                            </font>
@@ -105,11 +105,11 @@
                         <Font size="22.0" />
                      </font>
                   </Button>
-                  <Label fx:id="lblCardNumber" alignment="CENTER" layoutX="511.0" layoutY="20.0" prefHeight="72.0" prefWidth="159.0" style="-fx-background-color: lightgreen;" text="438375500030">
+                  <Label fx:id="lblCardNumber" alignment="CENTER" layoutX="511.0" layoutY="20.0" prefHeight="72.0" prefWidth="159.0" style="-fx-background-color: lightgreen;" text="438375500030" textAlignment="RIGHT">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font></Label>
-                  <Button fx:id="btnPay" layoutX="249.0" layoutY="386.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" text="Pay">
+                  <Button fx:id="btnPay" layoutX="249.0" layoutY="386.0" mnemonicParsing="false" onAction="#processPayment" prefHeight="35.0" prefWidth="180.0" text="Pay">
                      <font>
                         <Font name="Segoe UI" size="12.0" />
                      </font>

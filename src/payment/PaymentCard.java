@@ -1,19 +1,22 @@
 package payment;
 
-import database.Persistable;
-import java.time.*;
-import java.util.*;
+import database.*;
+import static database.DatabaseAccessor.CONNECTION;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Models a payment card
  * A payment card has a card number, an expiry date, a pin and a balance
  */
-public abstract class PaymentCard implements Persistable {
+public abstract class PaymentCard implements Persistable, Retrievable {
     private String cardNumber;
     private String cardName;
     private String expiryDate;
     private String pin;
     private double balance;
+    private PaymentCardType cardType;
 
     public PaymentCard() {
 
@@ -66,23 +69,21 @@ public abstract class PaymentCard implements Persistable {
     public void setBalance(double balance) {
         this.balance = balance;
     }
+    
+    public PaymentCardType getCardType() {
+        return this.cardType;
+    }
+    
+    public void setCardType(PaymentCardType cardType) {
+        this.cardType = cardType;
+    }
 
     /**
      * Releases funds from the payment card
      * @param amount the amount to release
      * @return true if fund release was successful or false if fund release was denied for some reason
      */
-    public boolean releaseFunds(double amount) {
-        if(amount <= getBalance()) {
-            setBalance(getBalance() - amount);
-            if(persist()) {
-                return true;
-            }
-        }
-        setBalance(getBalance() + amount);
-        return false;
-
-    }
+    public abstract boolean releaseFunds(double amount);
 
     /**
      * Validates a payment card using the Luhn algorithm
@@ -136,5 +137,23 @@ public abstract class PaymentCard implements Persistable {
         }
 
         return true;
+    }
+    
+    /**
+     * Retrieves the card type associated with a card number from the database
+     */
+    public static PaymentCardType retrievePaymentCardType(String cardNumber) {
+        final String QUERY = "SELECT payment_card_type FROM user_payment_cards WHERE payment_card_number" 
+                + " = '" + cardNumber + "';";
+        try {
+            Statement statement = CONNECTION.createStatement();
+            ResultSet retrievedCardTypeRS = statement.executeQuery(QUERY);
+            if(retrievedCardTypeRS.next()) {
+                return PaymentCardType.valueOf(retrievedCardTypeRS.getString("payment_card_type"));
+            }
+        }catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 }

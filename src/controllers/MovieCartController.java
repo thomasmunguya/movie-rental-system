@@ -33,6 +33,9 @@ public class MovieCartController implements Initializable {
     @FXML
     private Button btnGoBack;
     
+    @FXML
+    private AnchorPane rootPane;
+    
     public static final List<Movie> MOVIE_CART = new ArrayList<>();
     
     
@@ -81,8 +84,14 @@ public class MovieCartController implements Initializable {
      * Navigates to the payment UI
      * 
      */
-    public void navigateToPayment() {
-        
+    public void navigateToPayment() throws IOException {
+        AnchorPane mainMenuRootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/CardPayment.fxml"));
+        Scene scene = new Scene(mainMenuRootPane, 720, 600);
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Card Payment");
+        stage.setResizable(false);
+        stage.show();
     }
     
 }

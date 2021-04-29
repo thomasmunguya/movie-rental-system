@@ -76,6 +76,7 @@ public class MovieDetailsController implements Initializable {
      * Navigates to the movie cart UI
      */
     public void navigateToMovieCart() throws IOException {
+        MovieCartController.MOVIE_CART.add(movie);
         AnchorPane movieCartrootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/MovieCart.fxml"));
         Scene scene = new Scene(movieCartrootPane, 720, 600);
         Stage stage = (Stage) rootPane.getScene().getWindow();
