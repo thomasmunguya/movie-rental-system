@@ -7,21 +7,34 @@ package controllers;
 
 import disc.Disc;
 import disc.DiscTag;
+import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.*;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import main.Movie;
 import main.Rental;
 import main.User;
 import payment.CreditCard;
 import payment.DebitCard;
 import payment.PaymentCard;
+import payment.PaymentCardType;
 import payment.Receipt;
 
 /**
@@ -80,9 +93,20 @@ public class PaymentController implements Initializable {
 
     private static final Alert ALERT = new Alert(Alert.AlertType.ERROR);
     
+    private static String pin;
+    
+    private static boolean pinAttemptsExhausted;
+    
+    private static final List<String> blockedCardNumbers = new ArrayList<>();
+    
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setUpNumberPadEventHandlers();
+    }
+    
+    public static void setPinAttemptsExhausted() {
+        pinAttemptsExhausted = true;
     }
     
     /**
@@ -142,6 +166,7 @@ public class PaymentController implements Initializable {
     
     /**
      * Registers a key press on the number pad
+     * @param key the key pressed
      */
     private void registerKeyPress(String key) {
        switch(key) {
@@ -156,8 +181,8 @@ public class PaymentController implements Initializable {
            case "8": lblCardNumber.setText(lblCardNumber.getText() + "8"); break;
            case "9": lblCardNumber.setText(lblCardNumber.getText() + "9"); break;
            case "DEL": {
-            if(lblCardNumber.getText().equals("")) {
-                lblCardNumber.setText("0");
+            if(lblCardNumber.getText().length() == 0) {
+                return;
             }
             String newText = lblCardNumber.getText().substring(0, lblCardNumber.getText().length() - 1);
             lblCardNumber.setText(newText);
@@ -170,40 +195,99 @@ public class PaymentController implements Initializable {
     @FXML
     /**
      *Processes a payment
-     * @return true if the payment was success, otherwise false
+     *@throws IOException passed on from the showPinRequestWindow() method
      */
-    public boolean processPayment() {
-        String cardNumber = lblCardNumber.getText();
-        CreditCard cCard = new CreditCard();
-        cCard.setCardNumber(cardNumber);
-        CreditCard retrievedCCard = (CreditCard) cCard.retrieveOne("card_number", cardNumber);
+    public void processPayment() throws IOException {
         
-        if(!PaymentCard.isValidCard(cCard) || retrievedCCard == null) {
+        PaymentCard paymentCard = null;
+        PaymentCard retrievedCard = null;
+        
+        String cardNumber = lblCardNumber.getText();
+        
+        //if the card has been blocked because the user entered a wrong PIN three times,
+        //block the card from making payments
+        if(blockedCardNumbers.contains(cardNumber)) {
+            ALERT.setAlertType(Alert.AlertType.ERROR);
+            ALERT.setHeaderText("Card blocked.");
+            ALERT.setContentText("Sorry. This card has been blocked because you entered a wrong PIN three times.");
+            ALERT.show();
+            return;
+        }
+        
+        //obtain the card type
+        PaymentCardType cardType = PaymentCard.retrievePaymentCardType(cardNumber);
+        
+        //if the card type is a credit card then instatiate a credit card
+        if(cardType.equals(PaymentCardType.CREDIT_CARD)) {
+            paymentCard = new CreditCard();
+            paymentCard.setCardNumber(cardNumber);
+            retrievedCard = (CreditCard) paymentCard.retrieveOne("card_number", cardNumber);
+            PinRequestController.setPin(retrievedCard.getPin());
+        }
+        
+        //if its a debit card then instantiate a debit card
+        else if(cardType.equals(PaymentCardType.DEBIT_CARD)) {
+            paymentCard = new DebitCard();
+            paymentCard.setCardNumber(cardNumber);
+            retrievedCard = (DebitCard) paymentCard.retrieveOne("card_number", cardNumber);
+            PinRequestController.setPin(retrievedCard.getPin());
+        }
+        
+        //request for PIN before making a payment
+        showPinRequestWindow();
+        
+        //if a wrong PIN has been entered three times, add the card number to the list of blocked card numbers
+        if(pinAttemptsExhausted) {
+            blockedCardNumbers.add(cardNumber);
+            return;
+        }
+        
+        if(!PaymentCard.isValidCard(paymentCard) || retrievedCard == null) {
+          ALERT.setAlertType(Alert.AlertType.ERROR);
           ALERT.setHeaderText("Invalid Payment Card.");
           ALERT.setContentText("Your payment card is either not valid or is not registered with Movie Rental"
                   + " Ensure that your card number is correct and that it is registered with"
                   + "with Movie Rental");
           ALERT.show();
-          return false;
+          return;
         }
+        
+        
        
-        cCard = retrievedCCard;
-        retrievedCCard = null;
+        paymentCard = retrievedCard;
+        
+        //set the retrieved card to null to avoid loiterring
+        retrievedCard = null;
         
         
-        if(setUpRentalInfo()) {
+        //get the total amount to be paid from the receipt
+        double[] amountToPay = new double[1];
+        Receipt receipt = setUpRentalInfo();
+        receipt.getItems().forEach((item, rentalPrice) -> {
+            amountToPay[0] += rentalPrice;
+        });
+        
+        //if payment is successful display a success message
+        if(paymentCard.releaseFunds(amountToPay[0])) {
             ALERT.setAlertType(Alert.AlertType.INFORMATION);
             ALERT.setHeaderText("Payment Successful");
             ALERT.setContentText("Your payment was successful. Please collect your disc(s) from the disc dispenser.");
             ALERT.show();
-            return true;
+        }
+        else {
+            ALERT.setAlertType(Alert.AlertType.ERROR);
+            ALERT.setHeaderText("Payment Unsuccessful");
+            ALERT.setContentText("Looks like there was a problem processing your payment. Please try again later.");
+            ALERT.show();
         }
             
-        return false;
     }
     
-    
-    private boolean setUpRentalInfo() {
+    /**
+     * Sets up a rental information for the payment
+     * @return the receipt associated with the payment
+     */
+    private Receipt setUpRentalInfo() {
         
         DiscTag discTag = new DiscTag();
         discTag.setDateRented(LocalDate.now());
@@ -223,20 +307,36 @@ public class PaymentController implements Initializable {
             Disc disc = new Disc(movie.getDiscs().get(0).getDiscId(), discTag);
             movie.getDiscs().remove(0);
             
+            User user = new User();
+            
             rental.setDateRented(LocalDate.now());
             rental.setDisc(disc);
             rental.setRentalFee(movie.getRentalPrice());
-            
-            User user = new User();
-            
             rental.setUser((User) user.retrieveOne("payment_card_number", lblCardNumber.getText()));
+            rental.setReceipt(receipt);
+            rental.persist();
             
         });
         
         receipt.setItems(cartItems);
-        rental.setReceipt(receipt);
+        receipt.persist();
         
-        return receipt.persist() && rental.persist();
+        return receipt;
+    }
+
+    /**
+     * Shows the PIN request pop up window
+     * @throws IOException if the view file cannot be loaded
+     */
+    public void showPinRequestWindow() throws IOException {
+        AnchorPane pinRequestRootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/PinRequest.fxml"));
+        Scene scene = new Scene(pinRequestRootPane);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Enter PIN");
+        stage.setResizable(false);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.showAndWait();
     }
  
 }
