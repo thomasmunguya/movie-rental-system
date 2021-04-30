@@ -6,11 +6,11 @@ import java.util.*;
 /**
  * Handle business related to discs including dispensing and accepting returned discs
  */
-public class DiscHandler {
+public class DiscHandler  {
 
     /**
      * Dispenses a disc
-     * <pA disc is dispensed by setting the disc tag's date and time rented properties to the current date and time respectively
+     * <p A disc is dispensed by setting the disc tag's date and time rented properties to the current date and time respectively
      * and erasing the old disc tag's date and time returned properties </p>
      * @param disc the disc to dispense
      * @return true if the disc was successfully dispense, otherwise false
@@ -34,7 +34,8 @@ public class DiscHandler {
      * @return true if the disc is accepted, otherwise false
      */
     public static boolean acceptReturnedDisc(Disc disc) {
-        //to be implemented
-        return true;
+        
     }
+    
+    public 
 }

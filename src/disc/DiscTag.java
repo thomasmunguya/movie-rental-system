@@ -1,12 +1,18 @@
 package disc;
 
+import static database.DatabaseAccessor.CONNECTION;
+import database.Persistable;
+import database.Retrievable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.*;
 
 /**
  * Models a disc tag
  * A disc tag is represented by the date, and the time the disc was rented and by the date and the time it was returned
  */
-public class DiscTag {
+public class DiscTag implements Retrievable, Persistable{
 
     private LocalDate dateRented;
     private Instant timeRented;
@@ -59,6 +65,48 @@ public class DiscTag {
         this.timeRented = timeRented;
         this.dateReturned = dateReturned;
         this.timeReturned = timeReturned;
+    }
+
+    @Override
+    public Retrievable retrieveOne(String columnName, String columnValue) {
+       final String QUERY = "SELECT * FROM disc_tag WHERE " + columnName
+               + " = '" + columnValue + "';";
+        try {
+            Statement statement = CONNECTION.createStatement();
+            ResultSet discTagsRS = statement.executeQuery(QUERY);
+            if(discTagsRS.next()) {
+                DiscTag discTag = new DiscTag();
+                discTag.setDateRented(LocalDate.parse(discTagsRS.getString("date_rented")));
+                discTag.setTimeRented(Instant.parse(discTagsRS.getString("time_rented")));
+                discTag.setDateReturned(LocalDate.parse(discTagsRS.getString("date_returned")));
+                discTag.setTimeReturned(Instant.parse(discTagsRS.getString("time_returned")));
+                return discTag;
+            }
+        }catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean persist() {
+//         final String QUERY = "INSERT INTO credit_card VALUES('" + getCardNumber() + "',"
+//                + " '" + getDateRented() + "',"
+//                + " '" + get + "',"
+//                + " '" + getExpiryDate()+ "',"
+//                + " '" + getPin() + "',"
+//                + " '" + getCreditLimit() + "', "
+//                + " '" + getAmountCredited() + "')"
+//                + " ON DUPLICATE KEY UPDATE "
+//                + "date_returned = '" + getAmountCredited() + "',"
+//                + " time_returned = '" + getBalance() + "';";
+//        try {
+//            Statement statement = CONNECTION.createStatement();
+//            statement.executeUpdate(QUERY);
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+        return true;
     }
 
 }

@@ -1,12 +1,17 @@
 package disc;
 
-import database.Persistable;
+import database.*;
+import static database.DatabaseAccessor.CONNECTION;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import payment.CreditCard;
 
 /**
  * Models a disc
  * A disc has an ID by which it is recognized and a disc tag by which it can be traced
  */
-public class Disc implements Persistable {
+public class Disc implements Persistable, Retrievable {
 
     private int discId;
     private DiscTag discTag;
@@ -49,6 +54,23 @@ public class Disc implements Persistable {
 //        }
 //        return true;
         return true;
+    }
+    
+    @Override
+    public Retrievable retrieveOne(String columnName, String columnValue) {
+        final String QUERY = "SELECT * FROM disc WHERE " + columnName + 
+                " = '" + columnValue + "';";
+        try {
+            Statement statement = CONNECTION.createStatement();
+            ResultSet retrievedDiscRS = statement.executeQuery(QUERY);
+            if(retrievedDiscRS.next()) {
+                
+//                return creditCard;
+            }
+        }catch(SQLException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
 }
