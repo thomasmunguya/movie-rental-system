@@ -34,8 +34,8 @@ public class DiscHandler  {
      * @return true if the disc is accepted, otherwise false
      */
     public static boolean acceptReturnedDisc(Disc disc) {
-        
+        return true;
     }
     
-    public 
+//    public 
 }

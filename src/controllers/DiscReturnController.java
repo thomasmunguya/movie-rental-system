@@ -16,13 +16,13 @@ import javafx.fxml.Initializable;
  */
 public class DiscReturnController implements Initializable {
     
-    private DiscHandler discHandler = DiscHandler.
+//    private DiscHandler discHandler = DiscHandler.se
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
     }
     
-    DiscHandler 
+//    DiscHandler 
     
     
 }
