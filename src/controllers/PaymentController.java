@@ -14,13 +14,15 @@ import javafx.fxml.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.*;
 import main.*;
 import payment.*;
+import utils.Mailer;
 
 /**
- *
- * @author MTH
+ * 
+ * Controller class for the card payment view
  */
 public class PaymentController implements Initializable {
     
@@ -67,7 +69,7 @@ public class PaymentController implements Initializable {
     private Button btnBackSpace;
 
     @FXML
-    private Label lblCardNumber;
+    private Text txtCardNumber;
 
     @FXML
     private Button btnPay;
@@ -153,25 +155,29 @@ public class PaymentController implements Initializable {
      * @param key the key pressed
      */
     private void registerKeyPress(String key) {
+        if(txtCardNumber.getText().length() == 19) {
+            return;
+        }
+        
        switch(key) {
-           case "0": lblCardNumber.setText(lblCardNumber.getText() + "0"); break;
-           case "1": lblCardNumber.setText(lblCardNumber.getText() + "1"); break;
-           case "2": lblCardNumber.setText(lblCardNumber.getText() + "2"); break;
-           case "3": lblCardNumber.setText(lblCardNumber.getText() + "3"); break;
-           case "4": lblCardNumber.setText(lblCardNumber.getText() + "4"); break;
-           case "5": lblCardNumber.setText(lblCardNumber.getText() + "5"); break;
-           case "6": lblCardNumber.setText(lblCardNumber.getText() + "6"); break;
-           case "7": lblCardNumber.setText(lblCardNumber.getText() + "7"); break;
-           case "8": lblCardNumber.setText(lblCardNumber.getText() + "8"); break;
-           case "9": lblCardNumber.setText(lblCardNumber.getText() + "9"); break;
+           case "0": txtCardNumber.setText(txtCardNumber.getText() + "0"); break;
+           case "1": txtCardNumber.setText(txtCardNumber.getText() + "1"); break;
+           case "2": txtCardNumber.setText(txtCardNumber.getText() + "2"); break;
+           case "3": txtCardNumber.setText(txtCardNumber.getText() + "3"); break;
+           case "4": txtCardNumber.setText(txtCardNumber.getText() + "4"); break;
+           case "5": txtCardNumber.setText(txtCardNumber.getText() + "5"); break;
+           case "6": txtCardNumber.setText(txtCardNumber.getText() + "6"); break;
+           case "7": txtCardNumber.setText(txtCardNumber.getText() + "7"); break;
+           case "8": txtCardNumber.setText(txtCardNumber.getText() + "8"); break;
+           case "9": txtCardNumber.setText(txtCardNumber.getText() + "9"); break;
            case "DEL": {
-            if(lblCardNumber.getText().length() == 0) {
+            if(txtCardNumber.getText().length() == 0) {
                 return;
             }
-            String newText = lblCardNumber.getText().substring(0, lblCardNumber.getText().length() - 1);
-            lblCardNumber.setText(newText);
+            String newText = txtCardNumber.getText().substring(0, txtCardNumber.getText().length() - 1);
+            txtCardNumber.setText(newText);
            } break;
-           case "CLR": lblCardNumber.setText("0"); break;
+           case "CLR": txtCardNumber.setText("0"); break;
                      
        }
     }
@@ -186,7 +192,7 @@ public class PaymentController implements Initializable {
         PaymentCard paymentCard = null;
         PaymentCard retrievedCard = null;
         
-        String cardNumber = lblCardNumber.getText();
+        String cardNumber = txtCardNumber.getText();
         
         //if the card has been blocked because the user entered a wrong PIN three times,
         //block the card from making payments
@@ -257,6 +263,19 @@ public class PaymentController implements Initializable {
             ALERT.setHeaderText("Payment Successful");
             ALERT.setContentText("Your payment was successful. Please collect your disc(s) from the disc dispenser.");
             ALERT.show();
+            
+            Runnable mailDeliverer = () -> {
+                Mailer mailer = Mailer.getInstance();
+                try {
+                    mailer.sendReceiptEmail("thomasmunguya@gmail.com", receipt);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            };
+            
+            Thread mailerDeliverThread = new Thread(mailDeliverer);
+            mailerDeliverThread.start();
+            
         }
         else {
             ALERT.setAlertType(Alert.AlertType.ERROR);
@@ -296,7 +315,7 @@ public class PaymentController implements Initializable {
             rental.setDateRented(LocalDate.now());
             rental.setDisc(disc);
             rental.setRentalFee(movie.getRentalPrice());
-            rental.setUser((User) user.retrieveOne("payment_card_number", lblCardNumber.getText()));
+            rental.setUser((User) user.retrieveOne("payment_card_number", txtCardNumber.getText()));
             rental.setReceipt(receipt);
             rental.persist();
             

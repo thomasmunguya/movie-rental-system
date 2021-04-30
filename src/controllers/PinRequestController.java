@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * Controller class for PIN request view
+ * Controller class for the PIN request view
  */
 public class PinRequestController implements Initializable {
     
@@ -54,7 +54,8 @@ public class PinRequestController implements Initializable {
                 if(pinAttemptsLeft == 0) {
                     ALERT.setAlertType(Alert.AlertType.WARNING);
                     ALERT.setHeaderText("PIN attempts exhausted.");
-                    ALERT.setContentText("You have entered an incorrect PIN three times. Your card has been blocked.");
+//                    ALERT.setContentText("You have entered an incorrect PIN three times. Your card has been blocked.");
+                    ALERT.getDialogPane().setContent( new Label("You have entered an incorrect PIN three times. Your card has been blocked."));
                     ALERT.show();
                     btnOK.setDisable(true);
                     PaymentController.setPinAttemptsExhausted();

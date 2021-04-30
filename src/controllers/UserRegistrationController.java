@@ -7,10 +7,7 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.util.Observable;
 import java.util.ResourceBundle;
-import javafx.beans.InvalidationListener;
 import javafx.fxml.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -23,6 +20,10 @@ import payment.DebitCard;
 import payment.PaymentCard;
 
 
+/**
+ * Controller class for the user registration view
+ * @author MTH
+ */
 public class UserRegistrationController implements Initializable {
     
     @FXML
@@ -60,7 +61,6 @@ public class UserRegistrationController implements Initializable {
     @FXML
     /**
      * Attempts to register a user
-     * This method relies on the overloaded registerUser() method
      */
     public void registerUser() {
         PaymentCard card;
@@ -91,6 +91,7 @@ public class UserRegistrationController implements Initializable {
             card.setCardNumber(tfCardNumber.getText());
             card.setExpiryDate(tfExpiryDate.getText());
             ((CreditCard)card).setCreditLimit(5000);
+            ((CreditCard)card).setAmountCredited(0);
         }
         
         if(PaymentCard.isValidCard(card)) {

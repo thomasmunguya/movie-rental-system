@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author MTH
+ * Controller class for the main menu view
  */
 public class MainMenuController implements Initializable {
     

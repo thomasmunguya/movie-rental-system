@@ -7,40 +7,41 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PaymentController">
    <children>
-      <SplitPane dividerPositions="0.1518624641833811" orientation="VERTICAL" prefHeight="700.0" prefWidth="750.0" stylesheets="@movies.css">
+      <SplitPane dividerPositions="0.202" orientation="VERTICAL" prefHeight="700.0" prefWidth="750.0" stylesheets="@movies.css">
          <items>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="117.0" prefWidth="598.0" style="-fx-background-color: #ff3900;">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="117.0" prefWidth="598.0" style="-fx-background-color: #0080ff;">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff3900" height="43.0" layoutX="14.0" layoutY="14.0" stroke="#f2ff00" strokeType="INSIDE" strokeWidth="4.0" width="206.0" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="283.0" layoutY="14.0" prefHeight="43.0" prefWidth="239.0" text="CARD PAYMENT" textFill="WHITE">
-                     <font>
-                        <Font name="Segoe UI Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="206.0" text="Xtra-vision" textFill="#f2ff00">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="255.0" layoutY="88.0" prefHeight="43.0" prefWidth="239.0" text="CARD PAYMENT" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-               </children>
-            </AnchorPane>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="430.0" prefWidth="718.0" style="-fx-background-color: black;">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff3900" height="153.0" layoutY="437.0" stroke="#ff3900" strokeType="INSIDE" width="750.0" />
-                  <Button fx:id="btnGoBack" layoutX="14.0" layoutY="386.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" text="Go Back">
+                  <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="43.0" prefWidth="206.0" text="MOVIE RENTAL" textFill="#f2ff00">
                      <font>
-                        <Font name="Segoe UI" size="12.0" />
-                     </font>
-                  </Button>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="161.0" prefHeight="98.0" prefWidth="434.0" text="Please insert your card all the way into the reader" textFill="WHITE" wrapText="true">
-                     <font>
-                        <Font size="25.0" />
+                        <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Separator layoutX="442.0" layoutY="10.0" orientation="VERTICAL" prefHeight="411.0" prefWidth="9.0" />
+                  <Button fx:id="btnGoBack" layoutX="14.0" layoutY="83.0" mnemonicParsing="false" onAction="#navigateToMovieCart" prefHeight="35.0" prefWidth="80.0" style="-fx-background-color: #ff3700;" text="Go Back" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="430.0" prefWidth="718.0" style="-fx-background-color: #1d2740;">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff3900" height="128.0" layoutY="460.0" stroke="#ff3900" strokeType="INSIDE" width="750.0" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="161.0" prefHeight="98.0" prefWidth="434.0" text="Please enter your card number to proceed to payment." textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font size="26.0" />
+                     </font>
+                  </Label>
+                  <Separator layoutX="444.0" layoutY="26.0" orientation="VERTICAL" prefHeight="398.0" prefWidth="8.0" />
                   <AnchorPane fx:id="numberPadPane" layoutX="508.0" layoutY="102.0">
                      <children>
                         <Button fx:id="btn1" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="1">
@@ -95,25 +96,27 @@
                         </Button>
                      </children>
                   </AnchorPane>
-                  <Button fx:id="btnClear" layoutX="624.0" layoutY="279.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0">
+                  <Button fx:id="btnClear" layoutX="624.0" layoutY="279.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: red;" text="CLR" textFill="WHITE">
                      <font>
-                        <Font size="22.0" />
+                        <Font name="System Bold" size="13.0" />
                      </font>
                   </Button>
-                  <Button fx:id="btnBackSpace" layoutX="508.0" layoutY="279.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0">
+                  <Button fx:id="btnBackSpace" layoutX="508.0" layoutY="279.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #ff3700;" text="DEL" textFill="WHITE">
                      <font>
-                        <Font size="22.0" />
+                        <Font name="System Bold" size="13.0" />
                      </font>
                   </Button>
-                  <Label fx:id="lblCardNumber" alignment="CENTER" layoutX="511.0" layoutY="20.0" prefHeight="72.0" prefWidth="159.0" style="-fx-background-color: lightgreen;" text="438375500030" textAlignment="RIGHT">
+                  <Button fx:id="btnPay" layoutX="501.0" layoutY="386.0" mnemonicParsing="false" onAction="#processPayment" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: #00ff00;" text="Pay" textFill="WHITE">
+                     <font>
+                        <Font name="Segoe UI Bold" size="20.0" />
+                     </font>
+                  </Button>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="LIGHTGREEN" height="63.0" layoutX="508.0" layoutY="26.0" stroke="BLACK" strokeType="INSIDE" width="166.0" />
+                  <Text fx:id="txtCardNumber" layoutX="514.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT" wrappingWidth="154.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
-                     </font></Label>
-                  <Button fx:id="btnPay" layoutX="249.0" layoutY="386.0" mnemonicParsing="false" onAction="#processPayment" prefHeight="35.0" prefWidth="180.0" text="Pay">
-                     <font>
-                        <Font name="Segoe UI" size="12.0" />
                      </font>
-                  </Button>
+                  </Text>
                </children>
             </AnchorPane>
          </items>

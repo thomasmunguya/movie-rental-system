@@ -19,7 +19,7 @@ import main.Movie;
 
 /**
  *
- * @author MTH
+ * Controller class for the movie details view
  */
 public class MovieDetailsController implements Initializable {
   
@@ -109,7 +109,7 @@ public class MovieDetailsController implements Initializable {
         txtReleaseDate.setText(movie.getReleaseDate().toString());
         txtTitle.setText(movie.getTitle());
         txtDirector.setText(movie.getDirector());
-        imgViewCover.setImage(movie.getImage());
+        imgViewCover = movie.getImage();
         txtDescription.setText(movie.getDescription());
     }
     

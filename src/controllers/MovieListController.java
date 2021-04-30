@@ -11,21 +11,19 @@ import javafx.scene.image.*;
 import main.Movie;
 import javafx.scene.text.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static java.util.stream.Collectors.toMap;
 import java.util.stream.IntStream;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Pagination;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-
+/**
+ *
+ * Controller class for the movie list view
+ */
 public class MovieListController implements Initializable {
     
     @FXML
@@ -76,11 +74,11 @@ public class MovieListController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources){
           movieList = Movie.retrieveAll();
-//          loadMovies();
-//          navigateToNextPage();
-//          setUpPageNavigationButtons();
+////          loadMovies();
+////          navigateToNextPage();
+////          setUpPageNavigationButtons();
           partition(movieList, 2).forEach((t, movies) -> {
-                ImageView imgViewMovieCover = new ImageView(movies.get(0).getImage());
+                ImageView imgViewMovieCover = movies.get(0).getImage();
                imgViewMovieCover.setFitWidth(200);
                imgViewMovieCover.setFitHeight(300);
                imgViewMovieCover.setSmooth(true);
@@ -128,7 +126,7 @@ public class MovieListController implements Initializable {
            movieCoversPane.setPrefHeight(391);
            
            for (int i = 0; i < pageIndex + 10; i++) {
-               ImageView imgViewMovieCover = new ImageView(movieList.get(i).getImage());
+               ImageView imgViewMovieCover = movieList.get(i).getImage();
                imgViewMovieCover.setFitWidth(200);
                imgViewMovieCover.setFitHeight(300);
                imgViewMovieCover.setSmooth(true);
@@ -262,6 +260,11 @@ public class MovieListController implements Initializable {
 //        loadMovies(currentIndex - MOVIES_PER_PAGE, currentIndex);
     }
     
+    /**
+     * Navigates to movie details UI
+     * @param movie the movie whose details to display
+     * @throws IOException 
+     */
     private void navigateToMovieDetails(Movie movie) throws IOException{
         MovieDetailsController.setMovie(movie);
         AnchorPane movieDetailsRootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/MovieDetails.fxml"));

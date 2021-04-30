@@ -23,8 +23,8 @@ public class Movie implements Retrievable, Persistable {
     private MovieGenre genre;
     private boolean available;
     private LocalDate releaseDate;
-    private Image image;
-    private String pathToImage;
+    private ImageView image;
+    private String pathToImageView;
     private String description;
     private double rentalPrice;
 
@@ -48,12 +48,12 @@ public class Movie implements Retrievable, Persistable {
      * @param available the availability of the movie, true if available and false otherwise
      * @param releaseDate the release date of the movie
      * @param image the cover image associated with the movie
-     * @param pathToImage the path to the cover image of the movie
+     * @param pathToImageView the path to the cover image of the movie
      * @param description the description of the movie
      */
     public Movie(String id, String title, String actors, String director, double rating,
                  int lengthInMinutes, List<Disc> discs, MovieGenre genre, boolean available,
-                 LocalDate releaseDate, Image image, String pathToImage, String description,
+                 LocalDate releaseDate, ImageView image, String pathToImageView, String description,
                  double rentalPrice) {
         this.id = id;
         this.title = title;
@@ -66,7 +66,7 @@ public class Movie implements Retrievable, Persistable {
         this.available = available;
         this.releaseDate = releaseDate;
         this.image = image;
-        this.pathToImage = pathToImage;
+        this.pathToImageView = pathToImageView;
         this.description = description;
         this.rentalPrice = rentalPrice;
     }
@@ -151,20 +151,20 @@ public class Movie implements Retrievable, Persistable {
         this.releaseDate = releaseDate;
     }
 
-    public Image getImage() {
+    public ImageView getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(ImageView image) {
         this.image = image;
     }
 
     public String getPathToImage() {
-        return pathToImage;
+        return pathToImageView;
     }
 
-    public void setPathToImage(String pathToImage) {
-        this.pathToImage = pathToImage;
+    public void setPathToImage(String pathToImageView) {
+        this.pathToImageView = pathToImageView;
     }
     
     public String getDescription() {
@@ -202,7 +202,7 @@ public class Movie implements Retrievable, Persistable {
                 movie.setReleaseDate(LocalDate.parse(retrievedMoviesRS.getString("release_date")));
                 movie.setAvailable(Boolean.getBoolean(retrievedMoviesRS.getString("available")));
                 movie.setPathToImage(retrievedMoviesRS.getString("path_to_image"));
-                movie.setImage(new Image(retrievedMoviesRS.getString("path_to_image")));
+                movie.setImage(new ImageView(retrievedMoviesRS.getString("path_to_image")));
                 movie.setDescrition(retrievedMoviesRS.getString("description"));
                 movie.setRentalPrice(Double.parseDouble(retrievedMoviesRS.getString("rental_price")));
                 retrievedMovies.add(movie);
@@ -319,7 +319,7 @@ public class Movie implements Retrievable, Persistable {
 //            System.out.println("Genre: " + movie.getGenre());
 //            System.out.println("Available: " + movie.isAvailable());
 //            System.out.println("Release date: " + movie.getReleaseDate());
-//            System.out.println("pathToImage: " + movie.getPathToImage());
+//            System.out.println("pathToImageView: " + movie.getPathToImageView());
 //        }
 
     }
@@ -343,7 +343,7 @@ public class Movie implements Retrievable, Persistable {
                 movie.setReleaseDate(LocalDate.parse(retrievedMoviesRS.getString("release_date")));
                 movie.setAvailable(Boolean.getBoolean(retrievedMoviesRS.getString("available")));
                 movie.setPathToImage(retrievedMoviesRS.getString("path_to_image"));
-                movie.setImage(new Image(retrievedMoviesRS.getString("path_to_image")));
+                movie.setImage(new ImageView(retrievedMoviesRS.getString("path_to_image")));
                 movie.setDescrition(retrievedMoviesRS.getString("description"));
                 movie.setRentalPrice(Double.parseDouble(retrievedMoviesRS.getString("rental_price")));
                 return movie;

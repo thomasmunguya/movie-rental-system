@@ -38,9 +38,16 @@ public class CreditCard extends PaymentCard {
 
     @Override
     public boolean persist() {
-        final String QUERY = "INSERT INTO credit_card VALUES('" + getCardNumber() + "', '"
-                + getCardName() + "', " + getBalance() + ", '" + getExpiryDate()+ "', "
-                + getPin() + ", " + getCreditLimit() + ");";
+        final String QUERY = "INSERT INTO credit_card VALUES('" + getCardNumber() + "',"
+                + " '" + getCardName() + "',"
+                + " '" + getBalance() + "',"
+                + " '" + getExpiryDate()+ "',"
+                + " '" + getPin() + "',"
+                + " '" + getCreditLimit() + "', "
+                + " '" + getAmountCredited() + "')"
+                + " ON DUPLICATE KEY UPDATE "
+                + "amount_credited = '" + getAmountCredited() + "',"
+                + " balance = '" + getBalance() + "';";
         try {
             Statement statement = CONNECTION.createStatement();
             statement.executeUpdate(QUERY);
@@ -50,7 +57,10 @@ public class CreditCard extends PaymentCard {
         return true;
     }
     
-
+    /**
+     * Retrieves all the credit cards from the database
+     * @return the list of credit cards retrieved 
+     */
     public static List<CreditCard> retrieveAll() {
         final String QUERY = "SELECT * FROM credit_card;";
 

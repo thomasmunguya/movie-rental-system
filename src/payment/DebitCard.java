@@ -1,10 +1,12 @@
 package payment;
 
 import static database.DatabaseAccessor.CONNECTION;
-import database.Retrievable;
+import database.*;
 import java.sql.*;
 import java.util.*;
-
+/**
+ * Models a debit card
+ */
 public class DebitCard extends PaymentCard {
 
     public DebitCard() {
@@ -17,9 +19,13 @@ public class DebitCard extends PaymentCard {
 
     @Override
     public boolean persist() {
-        final String QUERY = "INSERT INTO debit_card VALUES('" + getCardNumber() + "', '"
-                + getCardName() + "', " + getBalance() + ", '" + getExpiryDate()+ "', "
-                + getPin() + ");";
+        final String QUERY = "INSERT INTO debit_card VALUES('" + getCardNumber() + "',"
+                + " '" + getCardName() + "',"
+                + " '" + getBalance() + "',"
+                + " '" + getExpiryDate()+ "',"
+                + " '" + getPin() + "')"
+                + " ON DUPLICATE KEY UPDATE"
+                + " balance = '" + getBalance() + "';";
         try {
             Statement statement = CONNECTION.createStatement();
             statement.executeUpdate(QUERY);
