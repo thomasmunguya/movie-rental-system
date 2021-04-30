@@ -6,14 +6,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="158.0" prefWidth="348.0" style="-fx-background-color: #0080ff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PinRequestController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="158.0" prefWidth="348.0" style="-fx-background-color: #0080ff;" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PinRequestController">
    <children>
-      <Button fx:id="btnCancel" layoutX="189.0" layoutY="113.0" mnemonicParsing="false" style="-fx-background-color: #ff3700;" text="Cancel" textFill="#fffdfd">
+      <Button fx:id="btnCancel" layoutX="189.0" layoutY="113.0" mnemonicParsing="false" styleClass="red-button" text="Cancel" textFill="#fffdfd">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="btnOK" layoutX="100.0" layoutY="113.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="56.0" style="-fx-background-color: #00ff00;" text="OK" textFill="WHITE">
+      <Button fx:id="btnOK" layoutX="100.0" layoutY="113.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="56.0" styleClass="green-button" text="OK" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

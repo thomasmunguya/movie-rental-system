@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MovieCartController">
    <children>
@@ -26,7 +27,7 @@
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btnGoBack" layoutX="14.0" layoutY="88.0" mnemonicParsing="false" onAction="#navigateToMovieList" prefHeight="35.0" prefWidth="136.0" style="-fx-background-color: #ccff00;" text="Add More Movies" textFill="WHITE">
+                  <Button fx:id="btnGoBack" layoutX="14.0" layoutY="88.0" mnemonicParsing="false" onAction="#navigateToMovieDetails" prefHeight="35.0" prefWidth="80.0" styleClass="red-button" stylesheets="@../css/styles.css" text="Go Back" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -36,23 +37,28 @@
             <AnchorPane fx:id="middlePane" minHeight="0.0" minWidth="0.0" prefHeight="430.0" prefWidth="718.0" style="-fx-background-color: #1d2740;">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff3700" height="98.0" layoutY="460.0" stroke="#ff3700" strokeType="INSIDE" width="750.0" />
-                  <Button fx:id="btnCheckout" layoutX="564.0" layoutY="392.0" mnemonicParsing="false" onAction="#navigateToPayment" prefHeight="50.0" prefWidth="136.0" style="-fx-background-color: #00ff00;" text="Checkout" textFill="#fffefe">
+                  <Button fx:id="btnCheckout" layoutX="575.0" layoutY="378.0" mnemonicParsing="false" onAction="#navigateToPayment" prefHeight="50.0" prefWidth="136.0" styleClass="green-button" stylesheets="@../css/styles.css" text="Checkout" textFill="#fffefe">
                      <font>
                         <Font name="System Bold" size="21.0" />
                      </font></Button>
                   <AnchorPane layoutX="14.0" layoutY="105.0" />
                   <AnchorPane layoutX="37.0" layoutY="378.0">
                      <children>
-                        <Button fx:id="btnAddMovie" layoutX="334.0" layoutY="4.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: #ff3700;" text="Remove From Cart" textFill="WHITE">
+                        <Button fx:id="btnRemoveFromCart" layoutX="386.0" layoutY="4.0" mnemonicParsing="false" onAction="#removeFromCart" prefHeight="35.0" prefWidth="136.0" styleClass="red-button" stylesheets="@../css/styles.css" text="Remove From Cart" textFill="WHITE">
                            <font>
-                              <Font size="15.0" />
+                              <Font size="13.0" />
                            </font>
                         </Button>
-                        <Label fx:id="lblCartItemsNumber" alignment="CENTER" layoutY="2.0" prefHeight="17.0" prefWidth="82.0" text="1 Item in Cart" textFill="WHITE">
+                        <Button fx:id="btnAddMoreMovies" layoutX="231.0" layoutY="5.0" mnemonicParsing="false" onAction="#navigateToMovieList" prefHeight="35.0" prefWidth="136.0" styleClass="yellow-button" stylesheets="@../css/styles.css" text="Add More Movies" textFill="WHITE">
                            <font>
-                              <Font name="Berlin Sans FB" size="14.0" />
+                              <Font size="13.0" />
                            </font>
-                        </Label>
+                        </Button>
+                        <Text fx:id="txtCartItemsNumber" fill="WHITE" layoutX="14.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="135.9999999999999">
+                           <font>
+                              <Font name="Berlin Sans FB" size="17.0" />
+                           </font>
+                        </Text>
                      </children>
                   </AnchorPane>
                   <TableView fx:id="tvMovieCart" layoutX="35.0" layoutY="65.0" prefHeight="300.0" prefWidth="676.0" stylesheets="@../utils/newCascadeStyleSheet.css">

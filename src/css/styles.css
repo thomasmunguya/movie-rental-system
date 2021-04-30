@@ -1,0 +1,14 @@
+.green-button {
+    -fx-base:   #00ff00;
+}
+.yellow-button {
+    -fx-base:  #ccff00;
+}
+
+.red-button {
+    -fx-base:  #ff3700;
+}
+
+#btnClear {
+    -fx-base:  red;
+}

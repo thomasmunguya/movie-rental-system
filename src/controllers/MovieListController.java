@@ -65,8 +65,6 @@ public class MovieListController implements Initializable {
     @FXML
     private AnchorPane movieListPane;
     
-    private static int currentIndex = 0;
-    private static int pageNumber = 0;
     private static List<Movie> movieList;
     private static final int MOVIES_PER_PAGE = 12;
     
@@ -74,37 +72,7 @@ public class MovieListController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources){
           movieList = Movie.retrieveAll();
-////          loadMovies();
-////          navigateToNextPage();
-////          setUpPageNavigationButtons();
-          partition(movieList, 2).forEach((t, movies) -> {
-                ImageView imgViewMovieCover = movies.get(0).getImage();
-               imgViewMovieCover.setFitWidth(200);
-               imgViewMovieCover.setFitHeight(300);
-               imgViewMovieCover.setSmooth(true);
-               
-               imgViewMovieCover.setOnMouseReleased((event) -> {
-                   try {
-                       navigateToMovieDetails(movieList.get(0));
-                   } catch (IOException ex) {
-                       ex.printStackTrace();
-                   }
-               });
-               Text txtMovieTitle = new Text(movieList.get(0).getTitle());
-              txtMovieTitle.setFont(Font.font("Berlin Sans FB", 12));
-              txtMovieTitle.setTextAlignment(TextAlignment.CENTER);
-              txtMovieTitle.setFill(Paint.valueOf("WHITE"));
-              txtMovieTitle.setWrappingWidth(100);
-              
-              HBox movieCoversPane = new HBox(20);
-            movieCoversPane.setPrefWidth(720);
-            movieCoversPane.setPrefHeight(391);
-
-              VBox vBoxCoverAndTitle = new VBox();
-              vBoxCoverAndTitle.getChildren().addAll(imgViewMovieCover, txtMovieTitle);
-              movieCoversPane.getChildren().add(vBoxCoverAndTitle);
-              rootPane.getChildren().add(movieCoversPane);
-          });
+          loadMovies();
     }
     
     /**
@@ -113,134 +81,16 @@ public class MovieListController implements Initializable {
      * @param endIndex the index (exclusive) at which to end loading the movies
      */
     private void loadMovies() {
+//       paginationMovieList.setLayoutX(100);
+//       paginationMovieList.setLayoutY(40);
+       paginationMovieList.setPageCount(movieList.size());
         
-//        List<String> movieCovers = new ArrayList<>();
-       paginationMovieList.setOnDragEntered((event) -> {
-//           if(paginationMovieList.getOnDragEntered().equals(MouseDragEvent.))
-           paginationMovieList.setCurrentPageIndex(paginationMovieList.getCurrentPageIndex() + 1);
-       });
        paginationMovieList.setPageFactory(new Callback<Integer, Node>() {
         public Node call(Integer pageIndex) {
-           HBox movieCoversPane = new HBox(20);
-           movieCoversPane.setPrefWidth(720);
-           movieCoversPane.setPrefHeight(391);
-           
-           for (int i = 0; i < pageIndex + 10; i++) {
-               ImageView imgViewMovieCover = movieList.get(i).getImage();
-               imgViewMovieCover.setFitWidth(200);
-               imgViewMovieCover.setFitHeight(300);
-               imgViewMovieCover.setSmooth(true);
-               imgViewMovieCover.setOnMouseReleased((event) -> {
-                   try {
-                       navigateToMovieDetails(movieList.get(0));
-                   } catch (IOException ex) {
-                       ex.printStackTrace();
-                   }
-               });
-               
-              Text txtMovieTitle = new Text(movieList.get(i).getTitle());
-              txtMovieTitle.setFont(Font.font("Berlin Sans FB", 12));
-              txtMovieTitle.setTextAlignment(TextAlignment.CENTER);
-              txtMovieTitle.setFill(Paint.valueOf("WHITE"));
-              txtMovieTitle.setWrappingWidth(100);
-
-              VBox vBoxCoverAndTitle = new VBox();
-              vBoxCoverAndTitle.getChildren().addAll(imgViewMovieCover, txtMovieTitle);
-              movieCoversPane.getChildren().add(vBoxCoverAndTitle);
-           }
-           
-//           navigationButtonsPane.getChildren().add(movieCoversPane);
-           return movieCoversPane;
+           return createMovieCoverPane(pageIndex);
        }
       });
-//        
-//        if(!hBoxMovieRow1.getChildren().isEmpty()) {
-//            hBoxMovieRow1.getChildren().clear();
-//        }
-//        
-//        if(!hBoxMovieRow2.getChildren().isEmpty()) {
-//            hBoxMovieRow2.getChildren().clear();
-//        }
-//        
-//        for(int i = startIndex; i < endIndex; i++) {
-//            
-//            Movie movie = movieList.get(i);
-//            ImageView imageView = new ImageView();
-//            imageView.setFitWidth(95.0);
-//            imageView.setFitHeight(132.0);
-//            imageView.setImage(movie.getImage());
-//
-//            Text txtMovieTitle = new Text(movie.getTitle());
-//            txtMovieTitle.setFont(Font.font("Berlin Sans FB", 12));
-//            txtMovieTitle.setTextAlignment(TextAlignment.CENTER);
-//            txtMovieTitle.setFill(Paint.valueOf("WHITE"));
-//            txtMovieTitle.setWrappingWidth(100);
-//
-//            VBox vBoxCoverAndTitle = new VBox();
-//            vBoxCoverAndTitle.setPrefWidth(95);
-//            vBoxCoverAndTitle.setPrefHeight(147);
-//            vBoxCoverAndTitle.getChildren().addAll(imageView, txtMovieTitle);
-//            
-//            if(moviesAddedOnRow < 6) {
-//                hBoxMovieRow1.getChildren().add(vBoxCoverAndTitle);
-//                moviesAddedOnRow++;
-//            }
-//            else if(moviesAddedOnRow > 5) {
-//                hBoxMovieRow2.getChildren().add(vBoxCoverAndTitle);
-//                moviesAddedOnRow++;
-//            }
-//            
-//            if(movieList.size() == endIndex) {
-//                currentIndex = currentIndex;
-//            }
-//            
-//            currentIndex = (pageNumber * 12) % 12;
-//
-//        }
-//    }
-//    
-//    private void setUpPageNavigationButtons() {
-//        ImageView nextIcon = new ImageView("img/next.png");
-//        nextIcon.setFitHeight(34);
-//        nextIcon.setFitWidth(34);
-//        
-//        Circle nextIconClip = new Circle();
-//        nextIconClip.setRadius(34);
-//        nextIconClip.setLayoutX(655);
-//        nextIconClip.setLayoutY(405);
-//        
-//        nextIcon.setClip(nextIconClip);
-//        
-//        navigationButtonsPane.getChildren().add(nextIcon);
-//    }
-//    
-//    
-//    @FXML
-//    /**
-//     * Navigates to next page of the movie list
-//     */
-//    public void navigateToNextPage() {
-//        if(currentIndex + MOVIES_PER_PAGE < movieList.size()) {
-//            loadMovies(currentIndex, currentIndex + MOVIES_PER_PAGE);
-//            pageNumber++;
-//            if(movieList.size() % MOVIES_PER_PAGE != 0 && (movieList.size() / MOVIES_PER_PAGE) < 1) {
-//                lblPageNumber.setText("PAGE " + pageNumber  + " OF 1");
-//            }
-//            else {
-//                lblPageNumber.setText("PAGE " + pageNumber  + " OF "  + (int)((movieList.size() / MOVIES_PER_PAGE) + 1));
-//            }
-//            
-//        }
-//        else {
-//            loadMovies(currentIndex, movieList.size());
-//            pageNumber++;
-//            if(movieList.size() % MOVIES_PER_PAGE != 0 && (movieList.size() / MOVIES_PER_PAGE) < 1) {
-//                lblPageNumber.setText("PAGE " + pageNumber  + " OF 1");
-//            }
-//            else {
-//                lblPageNumber.setText("PAGE " + pageNumber  + " OF "  + (int)((movieList.size() / MOVIES_PER_PAGE) + 1));
-//            }
-//        }
+       
             
     }
     
@@ -291,6 +141,42 @@ public class MovieListController implements Initializable {
         stage.show();
     }
     
+    private HBox createMovieCoverPane(int index) {
+        
+           HBox movieCoversPane = new HBox(20);
+           movieCoversPane.setPrefWidth(720);
+           movieCoversPane.setPrefHeight(500);
+           
+           for (int i = 0; i <= index; i++) {
+               
+               ImageView imgViewMovieCover = movieList.get(index).getImage();
+               imgViewMovieCover.setFitWidth(200);
+               imgViewMovieCover.setFitHeight(300);
+               imgViewMovieCover.setSmooth(true);
+               imgViewMovieCover.setLayoutX(100);
+               imgViewMovieCover.setOnMouseReleased((event) -> {
+                   try {
+                       navigateToMovieDetails(movieList.get(index));
+                   } catch (IOException ex) {
+                       ex.printStackTrace();
+                   }
+               });
+               
+      
+              Text txtMovieTitle = new Text(movieList.get(index).getTitle());
+              txtMovieTitle.setFont(Font.font("Berlin Sans FB", 14));
+              txtMovieTitle.setTextAlignment(TextAlignment.RIGHT);
+              txtMovieTitle.setFill(Paint.valueOf("WHITE"));
+              txtMovieTitle.setWrappingWidth(100);
+
+              VBox vBoxCoverAndTitle = new VBox();
+              vBoxCoverAndTitle.getChildren().addAll(imgViewMovieCover, txtMovieTitle);
+              
+              movieCoversPane.getChildren().add(vBoxCoverAndTitle);
+           }
+           
+           return movieCoversPane;
+    }
     
     
 }

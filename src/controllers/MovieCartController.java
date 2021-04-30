@@ -7,6 +7,7 @@ package controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.*;
 import javafx.scene.Scene;
@@ -17,7 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 import main.Movie;
 
 /**
@@ -50,7 +51,10 @@ public class MovieCartController implements Initializable {
     private Label anchorPaneCartDetails;
 
     @FXML
-    private Label lblCartItemsNumber;
+    private Text txtCartItemsNumber;
+    
+    @FXML
+    private Button btnRemoveFromCart;
     
     @FXML
     private TableView<Movie> tvMovieCart;
@@ -68,14 +72,28 @@ public class MovieCartController implements Initializable {
     
     @Override
     public void initialize(URL location, ResourceBundle resources){
-          showMoviesInCart();
+        
+        btnRemoveFromCart.setDisable(true);
+        showMoviesInCart();
+          
+          txtCartItemsNumber.setText(MOVIE_CART.size() + " Item(s) in cart.");
           
            MOVIE_CART.addListener(((ListChangeListener) c-> {
               if(!MOVIE_CART.isEmpty())
-                lblCartItemsNumber.setText(MOVIE_CART.size() + " Item(s) in cart.");
+                txtCartItemsNumber.setText(MOVIE_CART.size() + " Item(s) in cart.");
               else
-                  lblCartItemsNumber.setText("0 Item(s) in cart.");
+                  txtCartItemsNumber.setText("0 Item(s) in cart.");
           }));
+           
+          tvMovieCart.itemsProperty().addListener((observable) -> {
+              System.out.println("I am here");
+              if(tvMovieCart.getSelectionModel().getSelectedItems().isEmpty()) {
+                  
+                  btnRemoveFromCart.setDisable(true);
+              }
+              else btnRemoveFromCart.setDisable(false);
+          });
+          
     }
     
     @FXML
@@ -90,6 +108,31 @@ public class MovieCartController implements Initializable {
         stage.setTitle("Movie List");
         stage.setResizable(false);
         stage.show();
+    }
+    
+    @FXML
+     /**
+     * Navigates to movie details UI
+     * @param movie the movie whose details to display
+     * @throws IOException 
+     */
+    private void navigateToMovieDetails() throws IOException{
+        AnchorPane movieDetailsRootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/MovieDetails.fxml"));
+        Scene scene = new Scene(movieDetailsRootPane, 720, 600);
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Movie Details");
+        stage.setResizable(false);
+        stage.show();
+    }
+    
+    @FXML
+    /**
+     * Removes a movie from the cart
+     */
+    public void removeFromCart() {
+        List<Movie> selecetedMovies = tvMovieCart.getSelectionModel().getSelectedItems();
+        tvMovieCart.getItems().removeAll(selecetedMovies);
     }
     
     /**
