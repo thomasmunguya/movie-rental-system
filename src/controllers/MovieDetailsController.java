@@ -101,7 +101,7 @@ public class MovieDetailsController implements Initializable {
     }
     
     /**
-     *Display movie details
+     *Displays movie details
      */
     private void displayMovieDetails() {
         txtRating.setText(movie.getRating() + "");
@@ -111,6 +111,8 @@ public class MovieDetailsController implements Initializable {
         txtDirector.setText(movie.getDirector());
         imgViewCover = movie.getImage();
         txtDescription.setText(movie.getDescription());
+        txtLength.setText(movie.getLengthInMinutes() + " min");
+        txtRentalFee.setText("€" + movie.getRentalPrice() + "");
     }
     
 }

@@ -4,6 +4,7 @@ import static database.DatabaseAccessor.CONNECTION;
 import database.*;
 import java.sql.*;
 import java.util.*;
+import javafx.scene.control.Alert;
 /**
  * Models a debit card
  */
@@ -66,11 +67,10 @@ public class DebitCard extends PaymentCard {
             Statement statement = CONNECTION.createStatement();
             ResultSet retrievedCCardRS = statement.executeQuery(QUERY);
             if(retrievedCCardRS.next()) {
-                CreditCard debitCard = new CreditCard();
+                DebitCard debitCard = new DebitCard();
                 debitCard.setCardNumber(retrievedCCardRS.getString("card_number"));
                 debitCard.setCardName(retrievedCCardRS.getString("card_name"));
                 debitCard.setBalance(retrievedCCardRS.getDouble("balance"));
-                debitCard.setCreditLimit(retrievedCCardRS.getDouble("credit_limit"));
                 debitCard.setExpiryDate(retrievedCCardRS.getString("expiry_date"));
                 debitCard.setPin(retrievedCCardRS.getString("pin"));
                 return debitCard;
@@ -89,6 +89,12 @@ public class DebitCard extends PaymentCard {
                 return true;
             }
         }
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Insufficient Funds.");
+        alert.setContentText("Looks like you do not have sufficient funds. "
+                + "Please ensure that your payment card has enough funds before"
+                + " attempting a rental. ");
+        alert.show();
         return false;
     }
 

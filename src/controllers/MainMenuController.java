@@ -68,4 +68,18 @@ public class MainMenuController implements Initializable {
         stage.setResizable(false);
         stage.show();
     }
+    
+    @FXML
+    /**
+     * Navigates to disc return UI
+     */
+    public void navigateToDiscReturn() throws IOException {
+        AnchorPane registrationRootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/ReturnDisc.fxml"));
+        Scene scene = new Scene(registrationRootPane, 720, 600);
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Return Disc");
+        stage.setResizable(false);
+        stage.show();
+    }
 }

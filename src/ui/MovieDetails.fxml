@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
@@ -16,7 +15,7 @@
          <items>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="117.0" prefWidth="598.0" style="-fx-background-color: #0080ff;">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="198.0" layoutY="70.0" prefHeight="73.0" prefWidth="371.0" text="PRESS RENT BUTTON" textFill="WHITE">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="198.0" layoutY="70.0" prefHeight="73.0" prefWidth="371.0" text="MOVIE DETAILS" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Bold" size="28.0" />
                      </font>
@@ -49,7 +48,7 @@
                      <font>
                         <Font name="Berlin Sans FB" size="21.0" />
                      </font></Label>
-                  <Label alignment="CENTER" layoutX="570.0" layoutY="224.0" prefHeight="26.0" prefWidth="130.0" text="Actors" textFill="WHITE">
+                  <Label alignment="CENTER" layoutX="554.0" layoutY="224.0" prefHeight="26.0" prefWidth="130.0" text="Actors" textFill="WHITE">
                      <font>
                         <Font name="Berlin Sans FB" size="21.0" />
                      </font></Label>
@@ -65,11 +64,7 @@
                      <font>
                         <Font name="Berlin Sans FB" size="21.0" />
                      </font></Label>
-                  <ImageView fx:id="imgViewCover" fitHeight="240.0" fitWidth="180.0" layoutX="48.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../img/my_image.jpg" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="imgViewCover" fitHeight="240.0" fitWidth="180.0" layoutX="48.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" />
                   <Text fx:id="txtRating" fill="#616161" fontSmoothingType="LCD" layoutX="299.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2.0">
                      <font>
                         <Font name="Arial Bold" size="16.0" />
@@ -85,7 +80,7 @@
                         <Font name="Arial Bold" size="16.0" />
                      </font>
                   </Text>
-                  <Text fx:id="txtLength" fill="#616161" fontSmoothingType="LCD" layoutX="269.0" layoutY="402.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2020-07-07">
+                  <Text fx:id="txtLength" fill="#616161" fontSmoothingType="LCD" layoutX="280.0" layoutY="407.0" strokeType="OUTSIDE" strokeWidth="0.0" text="102 min">
                      <font>
                         <Font name="Arial Bold" size="16.0" />
                      </font>
@@ -100,12 +95,12 @@
                         <Font name="Arial Bold" size="16.0" />
                      </font>
                   </Text>
-                  <Text fx:id="txtDescription" fill="WHITE" layoutX="240.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vel diam cursus, molestie eros at, accumsan ex. Curabitur tincidunt turpis diam. Duis maximus maximus odio, quis vulputate massa consequat luctus. Proin ac sem ut leo efficitur malesuada vitae id lacus. Aliquam vel venenatis magna. Suspendisse vel vestibulum justo. Quisque tristique interdum vulputate. Donec eleifend porta tellus vitae interdum. Sed pharetra nisi nec turpis viverra dignissim. In risus nibh, facilisis non posuere a, porta pretium leo. Etiam semper nulla sed elit posuere, a efficitur leo pellentesque. Cras blandit eu sapien at consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vel diam cursus, molestie eros at, accumsan ex. Curabitur tincidunt turpis diam. Duis maximus maximus odio, quis vulputate massa consequat luctus. Proin ac sem ut leo efficitur malesuada vitae id lacus. Aliquam vel venenatis magna. Suspendisse vel vestibulum justo. Quisque tristique interdum vulputate. Donec eleifend porta tellus vitae interdum. Sed pharetra nisi nec turpis viverra dignissim. In risus nibh, facilisis non posuere a, porta pretium leo. Etiam semper nulla sed elit posuere, a efficitur leo pellentesque. Cras blandit eu sapien at consequat." wrappingWidth="488.13671875">
+                  <Text fx:id="txtDescription" fill="WHITE" layoutX="240.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A psychiatrist, whose client commits suicide, finds his family life disrupted after introducing her surviving brother to his wife and daughter." wrappingWidth="488.13671875">
                      <font>
-                        <Font name="Berlin Sans FB" size="11.0" />
+                        <Font name="Berlin Sans FB" size="23.0" />
                      </font>
                   </Text>
-                  <Text fx:id="txtTitle" fill="WHITE" layoutX="240.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie Title " wrappingWidth="236.13671875">
+                  <Text fx:id="txtTitle" fill="WHITE" layoutX="240.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Every Breath You Take in the New World" wrappingWidth="450.0">
                      <font>
                         <Font name="Berlin Sans FB" size="29.0" />
                      </font>

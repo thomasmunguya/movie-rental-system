@@ -18,6 +18,20 @@ public class DiscTag implements Retrievable, Persistable{
     private Instant timeRented;
     private LocalDate dateReturned;
     private Instant timeReturned;
+    private String id;
+
+    public DiscTag() {
+    }
+
+    
+    public DiscTag(LocalDate dateRented, Instant timeRented, LocalDate dateReturned,
+            Instant timeReturned, String id) {
+        this.dateRented = dateRented;
+        this.timeRented = timeRented;
+        this.dateReturned = dateReturned;
+        this.timeReturned = timeReturned;
+        this.id = id;
+    }
 
     public LocalDate getDateRented() {
         return dateRented;
@@ -51,22 +65,15 @@ public class DiscTag implements Retrievable, Persistable{
         this.timeReturned = timeReturned;
     }
 
-    public DiscTag() {
-
+    public String getId() {
+        return id;
     }
 
-    public DiscTag(LocalDate dateRented, Instant timeRented) {
-        this.dateRented = dateRented;
-        this.timeRented = timeRented;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public DiscTag(LocalDate dateRented, Instant timeRented, LocalDate dateReturned, Instant timeReturned) {
-        this.dateRented = dateRented;
-        this.timeRented = timeRented;
-        this.dateReturned = dateReturned;
-        this.timeReturned = timeReturned;
-    }
-
+    
     @Override
     public Retrievable retrieveOne(String columnName, String columnValue) {
        final String QUERY = "SELECT * FROM disc_tag WHERE " + columnName
@@ -80,6 +87,7 @@ public class DiscTag implements Retrievable, Persistable{
                 discTag.setTimeRented(Instant.parse(discTagsRS.getString("time_rented")));
                 discTag.setDateReturned(LocalDate.parse(discTagsRS.getString("date_returned")));
                 discTag.setTimeReturned(Instant.parse(discTagsRS.getString("time_returned")));
+                discTag.setId(discTagsRS.getString("id"));
                 return discTag;
             }
         }catch(SQLException ex) {
@@ -90,22 +98,21 @@ public class DiscTag implements Retrievable, Persistable{
 
     @Override
     public boolean persist() {
-//         final String QUERY = "INSERT INTO credit_card VALUES('" + getCardNumber() + "',"
-//                + " '" + getDateRented() + "',"
-//                + " '" + get + "',"
-//                + " '" + getExpiryDate()+ "',"
-//                + " '" + getPin() + "',"
-//                + " '" + getCreditLimit() + "', "
-//                + " '" + getAmountCredited() + "')"
-//                + " ON DUPLICATE KEY UPDATE "
-//                + "date_returned = '" + getAmountCredited() + "',"
-//                + " time_returned = '" + getBalance() + "';";
-//        try {
-//            Statement statement = CONNECTION.createStatement();
-//            statement.executeUpdate(QUERY);
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
+         final String QUERY = "INSERT INTO disc_tag VALUES('"
+                + getId() + "',"
+                + " '"  + getDateRented() + "',"
+                + " '" + getTimeRented() + "',"
+                + " '" + getDateReturned() + "',"
+                + " '" + getTimeReturned() + "')"
+                + " ON DUPLICATE KEY UPDATE "
+                + "date_returned = '" + getDateReturned() + "',"
+                + " time_returned = '" + getTimeReturned()+ "';";
+        try {
+            Statement statement = CONNECTION.createStatement();
+            statement.executeUpdate(QUERY);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
         return true;
     }
 

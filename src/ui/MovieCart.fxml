@@ -17,7 +17,7 @@
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="117.0" prefWidth="598.0" style="-fx-background-color: #0080ff;">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff3900" height="43.0" layoutX="14.0" layoutY="14.0" stroke="#f2ff00" strokeType="INSIDE" strokeWidth="4.0" width="206.0" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="255.0" layoutY="88.0" prefHeight="43.0" prefWidth="279.0" text="PRESS CHECKOUT" textFill="WHITE">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="255.0" layoutY="88.0" prefHeight="43.0" prefWidth="279.0" text="MOVIE CART" textFill="WHITE">
                      <font>
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
@@ -27,24 +27,19 @@
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btnGoBack" layoutX="14.0" layoutY="88.0" mnemonicParsing="false" onAction="#navigateToMovieDetails" prefHeight="35.0" prefWidth="80.0" styleClass="red-button" stylesheets="@../css/styles.css" text="Go Back" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="middlePane" minHeight="0.0" minWidth="0.0" prefHeight="430.0" prefWidth="718.0" style="-fx-background-color: #1d2740;">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ff3700" height="98.0" layoutY="460.0" stroke="#ff3700" strokeType="INSIDE" width="750.0" />
-                  <Button fx:id="btnCheckout" layoutX="575.0" layoutY="378.0" mnemonicParsing="false" onAction="#navigateToPayment" prefHeight="50.0" prefWidth="136.0" styleClass="green-button" stylesheets="@../css/styles.css" text="Checkout" textFill="#fffefe">
+                  <Button fx:id="btnCheckout" layoutX="563.0" layoutY="378.0" mnemonicParsing="false" onAction="#navigateToPayment" prefHeight="50.0" prefWidth="136.0" styleClass="green-button" stylesheets="@../css/styles.css" text="Checkout" textFill="#fffefe">
                      <font>
                         <Font name="System Bold" size="21.0" />
                      </font></Button>
                   <AnchorPane layoutX="14.0" layoutY="105.0" />
                   <AnchorPane layoutX="37.0" layoutY="378.0">
                      <children>
-                        <Button fx:id="btnRemoveFromCart" layoutX="386.0" layoutY="4.0" mnemonicParsing="false" onAction="#removeFromCart" prefHeight="35.0" prefWidth="136.0" styleClass="red-button" stylesheets="@../css/styles.css" text="Remove From Cart" textFill="WHITE">
+                        <Button fx:id="btnRemoveFromCart" layoutX="379.0" layoutY="4.0" mnemonicParsing="false" onAction="#removeFromCart" prefHeight="35.0" prefWidth="136.0" styleClass="red-button" stylesheets="@../css/styles.css" text="Remove From Cart" textFill="WHITE">
                            <font>
                               <Font size="13.0" />
                            </font>
@@ -61,7 +56,7 @@
                         </Text>
                      </children>
                   </AnchorPane>
-                  <TableView fx:id="tvMovieCart" layoutX="35.0" layoutY="65.0" prefHeight="300.0" prefWidth="676.0" stylesheets="@../utils/newCascadeStyleSheet.css">
+                  <TableView fx:id="tvMovieCart" layoutX="19.0" layoutY="18.0" prefHeight="347.0" prefWidth="676.0" stylesheets="@../utils/newCascadeStyleSheet.css">
                     <columns>
                       <TableColumn fx:id="tcMovieCover" editable="false" prefWidth="238.0" resizable="false" sortable="false" text="Cover" />
                       <TableColumn fx:id="tcMovieTitle" editable="false" prefWidth="327.0" resizable="false" sortable="false" text="Movie Title" />

@@ -15,14 +15,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.User;
-import payment.CreditCard;
-import payment.DebitCard;
-import payment.PaymentCard;
+import payment.*;
 
 
 /**
  * Controller class for the user registration view
- * @author MTH
  */
 public class UserRegistrationController implements Initializable {
     

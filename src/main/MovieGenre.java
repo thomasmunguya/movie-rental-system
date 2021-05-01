@@ -87,6 +87,20 @@ public enum MovieGenre {
         public String toString() {
             return "Other";
         }
+    },
+    
+    DRAMA {
+        @Override
+        public String toString() {
+            return "Drama";
+        }
+    },
+    
+    MYSTERY {
+        @Override
+        public String toString() {
+            return "Mystery";
+        }
     }
 
 

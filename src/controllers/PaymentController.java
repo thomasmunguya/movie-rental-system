@@ -85,6 +85,14 @@ public class PaymentController implements Initializable {
     
     private static final List<String> blockedCardNumbers = new ArrayList<>();
     
+    private static Receipt receipt;
+    
+    private static Rental rental;
+    
+    private static User user;
+    
+    private static List<Movie> moviesToRent = new ArrayList<>();
+    
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -177,7 +185,7 @@ public class PaymentController implements Initializable {
             String newText = txtCardNumber.getText().substring(0, txtCardNumber.getText().length() - 1);
             txtCardNumber.setText(newText);
            } break;
-           case "CLR": txtCardNumber.setText("0"); break;
+           case "CLR": txtCardNumber.setText(""); break;
                      
        }
     }
@@ -207,8 +215,10 @@ public class PaymentController implements Initializable {
         //obtain the card type
         PaymentCardType cardType = PaymentCard.retrievePaymentCardType(cardNumber);
         
+         
+        
         //if the card type is a credit card then instatiate a credit card
-        if(cardType.equals(PaymentCardType.CREDIT_CARD)) {
+        if(cardType != null && cardType.equals(PaymentCardType.CREDIT_CARD)) {
             paymentCard = new CreditCard();
             paymentCard.setCardNumber(cardNumber);
             retrievedCard = (CreditCard) paymentCard.retrieveOne("card_number", cardNumber);
@@ -216,11 +226,21 @@ public class PaymentController implements Initializable {
         }
         
         //if its a debit card then instantiate a debit card
-        else if(cardType.equals(PaymentCardType.DEBIT_CARD)) {
+        else if(cardType != null && cardType.equals(PaymentCardType.DEBIT_CARD)) {
             paymentCard = new DebitCard();
             paymentCard.setCardNumber(cardNumber);
             retrievedCard = (DebitCard) paymentCard.retrieveOne("card_number", cardNumber);
             PinRequestController.setPin(retrievedCard.getPin());
+        }
+        
+        if(retrievedCard == null || !PaymentCard.isValidCard(paymentCard)) {
+          ALERT.setAlertType(Alert.AlertType.ERROR);
+          ALERT.setHeaderText("Invalid Payment Card.");
+          ALERT.setContentText("Your payment card is either not valid or is not registered with Movie Rental"
+                  + " .Ensure that your card number is correct and that it is registered with"
+                  + "with Movie Rental");
+          ALERT.show();
+          return;
         }
         
         //request for PIN before making a payment
@@ -232,17 +252,6 @@ public class PaymentController implements Initializable {
             return;
         }
         
-        if(!PaymentCard.isValidCard(paymentCard) || retrievedCard == null) {
-          ALERT.setAlertType(Alert.AlertType.ERROR);
-          ALERT.setHeaderText("Invalid Payment Card.");
-          ALERT.setContentText("Your payment card is either not valid or is not registered with Movie Rental"
-                  + " Ensure that your card number is correct and that it is registered with"
-                  + "with Movie Rental");
-          ALERT.show();
-          return;
-        }
-        
-        
        
         paymentCard = retrievedCard;
         
@@ -252,13 +261,20 @@ public class PaymentController implements Initializable {
         
         //get the total amount to be paid from the receipt
         double[] amountToPay = new double[1];
-        Receipt receipt = setUpRentalInfo();
+        setUpPaymentInfo();
+        
         receipt.getItems().forEach((item, rentalPrice) -> {
             amountToPay[0] += rentalPrice;
         });
         
-        //if payment is successful display a success message
+        //if payment is successful, persist all information to the database,
+        //display a success message and send a receipt to the email if given
         if(paymentCard.releaseFunds(amountToPay[0])) {
+            
+            rental.persist();
+            receipt.persist();
+            moviesToRent.forEach((movie) -> movie.persist());
+            
             ALERT.setAlertType(Alert.AlertType.INFORMATION);
             ALERT.setHeaderText("Payment Successful");
             ALERT.setContentText("Your payment was successful. Please collect your disc(s) from the disc dispenser.");
@@ -267,7 +283,10 @@ public class PaymentController implements Initializable {
             Runnable mailDeliverer = () -> {
                 Mailer mailer = Mailer.getInstance();
                 try {
-                    mailer.sendReceiptEmail("thomasmunguya@gmail.com", receipt);
+                    if(!user.getEmailAddress().equals("")) return;
+                    
+                    mailer.sendReceiptEmail(user.getEmailAddress(), receipt);
+                        
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -277,29 +296,22 @@ public class PaymentController implements Initializable {
             mailerDeliverThread.start();
             
         }
-        else {
-            ALERT.setAlertType(Alert.AlertType.ERROR);
-            ALERT.setHeaderText("Payment Unsuccessful");
-            ALERT.setContentText("Looks like there was a problem processing your payment. Please try again later.");
-            ALERT.show();
-        }
             
     }
     
     /**
-     * Sets up a rental information for the payment
-     * @return the receipt associated with the payment
+     * Sets up payment information
      */
-    private Receipt setUpRentalInfo() {
+    private void setUpPaymentInfo() {
         
         DiscTag discTag = new DiscTag();
         discTag.setDateRented(LocalDate.now());
         
-        Receipt receipt = new Receipt();
+        receipt = new Receipt();
         receipt.setIssueDate(LocalDate.now());
         receipt.setIssueTime(Instant.now());
         
-        Rental rental = new Rental();
+        rental = new Rental();
         
         
         Map<String, Double> cartItems = new HashMap<>();
@@ -307,24 +319,22 @@ public class PaymentController implements Initializable {
         MovieCartController.MOVIE_CART.forEach((movie) -> {
             
             cartItems.put(movie.getTitle(), movie.getRentalPrice());
-            Disc disc = new Disc(movie.getDiscs().get(0).getDiscId(), discTag);
+            Disc disc = new Disc(movie.getDiscs().get(0).getId(), discTag);
             movie.getDiscs().remove(0);
+            moviesToRent.add(movie);
             
-            User user = new User();
+            user = new User();
             
             rental.setDateRented(LocalDate.now());
             rental.setDisc(disc);
             rental.setRentalFee(movie.getRentalPrice());
             rental.setUser((User) user.retrieveOne("payment_card_number", txtCardNumber.getText()));
             rental.setReceipt(receipt);
-            rental.persist();
             
         });
         
         receipt.setItems(cartItems);
-        receipt.persist();
         
-        return receipt;
     }
 
     /**

@@ -66,7 +66,6 @@ public class MovieListController implements Initializable {
     private AnchorPane movieListPane;
     
     private static List<Movie> movieList;
-    private static final int MOVIES_PER_PAGE = 12;
     
     
     @Override
@@ -93,23 +92,7 @@ public class MovieListController implements Initializable {
        
             
     }
-    
-    public Map<Integer, List<Movie>> partition(List<Movie> list, int pageSize) {
-    return IntStream.iterate(0, i -> i + pageSize)
-          .limit((list.size() + pageSize - 1) / pageSize)
-          .boxed()
-          .collect(toMap(i -> i / pageSize,
-                         i -> list.subList(i, min(i + pageSize, list.size()))));
-}
-    
-    @FXML
-    /**
-     *Navigates of the previous page of the movie list
-     */
-    public void navigateToPreviousPage() {
-//        loadMovies(currentIndex - MOVIES_PER_PAGE, currentIndex);
-    }
-    
+   
     /**
      * Navigates to movie details UI
      * @param movie the movie whose details to display
@@ -147,13 +130,13 @@ public class MovieListController implements Initializable {
            movieCoversPane.setPrefWidth(720);
            movieCoversPane.setPrefHeight(500);
            
-           for (int i = 0; i <= index; i++) {
+           for (int i = 0; i < index; i++) {
                
                ImageView imgViewMovieCover = movieList.get(index).getImage();
-               imgViewMovieCover.setFitWidth(200);
+               imgViewMovieCover.setFitWidth(205);
                imgViewMovieCover.setFitHeight(300);
                imgViewMovieCover.setSmooth(true);
-               imgViewMovieCover.setLayoutX(100);
+               imgViewMovieCover.setLayoutX(200);
                imgViewMovieCover.setOnMouseReleased((event) -> {
                    try {
                        navigateToMovieDetails(movieList.get(index));
@@ -167,7 +150,7 @@ public class MovieListController implements Initializable {
               txtMovieTitle.setFont(Font.font("Berlin Sans FB", 14));
               txtMovieTitle.setTextAlignment(TextAlignment.RIGHT);
               txtMovieTitle.setFill(Paint.valueOf("WHITE"));
-              txtMovieTitle.setWrappingWidth(100);
+              txtMovieTitle.setWrappingWidth(300);
 
               VBox vBoxCoverAndTitle = new VBox();
               vBoxCoverAndTitle.getChildren().addAll(imgViewMovieCover, txtMovieTitle);

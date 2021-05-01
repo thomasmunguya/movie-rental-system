@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="750.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UserRegistrationController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="750.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DiscReturnController">
    <children>
       <SplitPane dividerPositions="0.202" orientation="VERTICAL" prefHeight="700.0" prefWidth="750.0" stylesheets="@movies.css">
          <items>
@@ -21,12 +21,12 @@
                         <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="255.0" layoutY="77.0" prefHeight="43.0" prefWidth="239.0" text="DISC RETURN" textFill="WHITE">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="255.0" layoutY="77.0" prefHeight="43.0" prefWidth="239.0" text="PRESS RETURN DISC" textFill="WHITE">
                      <font>
-                        <Font name="Segoe UI Bold" size="28.0" />
+                        <Font name="Segoe UI Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Button fx:id="btnGoBack1" layoutX="14.0" layoutY="81.0" mnemonicParsing="false" onAction="#navigateToMovieDetails" prefHeight="35.0" prefWidth="80.0" styleClass="red-button" stylesheets="@../css/styles.css" text="Go Back" textFill="WHITE">
+                  <Button fx:id="btnGoBack" layoutX="14.0" layoutY="81.0" mnemonicParsing="false" onAction="#navigateToMainMenu" prefHeight="35.0" prefWidth="80.0" styleClass="red-button" stylesheets="@../css/styles.css" text="Go Back" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -42,7 +42,7 @@
                      </font>
                   </Label>
                   <TextField fx:id="tfDiscId" layoutX="267.0" layoutY="302.0" prefHeight="25.0" prefWidth="181.0" promptText="Enter disc ID" />
-                  <Button fx:id="btnRegister" layoutX="284.0" layoutY="368.0" mnemonicParsing="false" onAction="#registerUser" prefHeight="43.0" prefWidth="140.0" styleClass="green-button" text="RETURN DISC" textFill="WHITE">
+                  <Button fx:id="btnReturnDisc" layoutX="284.0" layoutY="368.0" mnemonicParsing="false" onAction="#acceptReturnedDisc" prefHeight="43.0" prefWidth="140.0" styleClass="green-button" text="RETURN DISC" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="17.0" />
                      </font>

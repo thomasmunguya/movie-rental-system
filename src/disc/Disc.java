@@ -5,32 +5,31 @@ import static database.DatabaseAccessor.CONNECTION;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import payment.CreditCard;
 
 /**
  * Models a disc
  * A disc has an ID by which it is recognized and a disc tag by which it can be traced
  */
-public class Disc implements Persistable, Retrievable {
+public class Disc implements Retrievable {
 
-    private int discId;
+    private String id;
     private DiscTag discTag;
 
     public  Disc() {
 
     }
 
-    public Disc(int discId, DiscTag discTag) {
-        this.discId = discId;
+    public Disc(String id, DiscTag discTag) {
+        this.id = id;
         this.discTag = discTag;
     }
 
-    public int getDiscId() {
-        return discId;
+    public String getId() {
+        return id;
     }
 
-    public void setDiscId(int discId) {
-        this.discId = discId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public DiscTag getDiscTag() {
@@ -39,21 +38,6 @@ public class Disc implements Persistable, Retrievable {
 
     public void setDiscTag(DiscTag discTag) {
         this.discTag = discTag;
-    }
-
-    @Override
-    public boolean persist() {
-//        final String QUERY = "INSERT INTO disc VALUES(" + getCardNumber() + ", '"
-//                + DateConvertor.convert(getExpiryDate()) + "', " + getPin() + ", "
-//                + getBalance() + ", " + getCreditLimit() + ");";
-//        try(CONNECTION) {
-//            Statement statement = CONNECTION.createStatement();
-//            statement.executeUpdate(QUERY);
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//        return true;
-        return true;
     }
     
     @Override
@@ -64,8 +48,10 @@ public class Disc implements Persistable, Retrievable {
             Statement statement = CONNECTION.createStatement();
             ResultSet retrievedDiscRS = statement.executeQuery(QUERY);
             if(retrievedDiscRS.next()) {
-                
-//                return creditCard;
+               DiscTag discTag = new DiscTag();
+               discTag.setId(retrievedDiscRS.getString("disc_tag_id"));
+               discTag = (DiscTag) discTag.retrieveOne("id", retrievedDiscRS.getString("disc_tag_id"));
+               return new Disc(retrievedDiscRS.getString("id"), discTag);
             }
         }catch(SQLException ex) {
             ex.printStackTrace();

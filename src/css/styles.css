@@ -12,3 +12,7 @@
 #btnClear {
     -fx-base:  red;
 }
+
+.blue-button {
+    -fx-base:  #0080ff;
+}
