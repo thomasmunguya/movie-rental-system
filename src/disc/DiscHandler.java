@@ -24,7 +24,7 @@ public class DiscHandler  {
         if(timeDifference > 1 && timeDifference < 10) {
            additionalCost = timeDifference * 1.50;
            disc.getDiscTag().setDateReturned(LocalDate.now());
-           disc.getDiscTag().setTimeRented(Instant.now());
+           disc.getDiscTag().setTimeRented(LocalTime.now());
            disc.getDiscTag().persist();
            return additionalCost;
         }

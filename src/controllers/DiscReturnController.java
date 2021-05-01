@@ -54,6 +54,17 @@ public class DiscReturnController implements Initializable {
         Disc disc = new Disc();
         disc.setId(tfDiscId.getText());
         disc = (Disc) disc.retrieveOne("id", disc.getId());
+        
+        if(disc.getDiscTag() == null) {
+            ALERT.setAlertType(AlertType.ERROR);
+            ALERT.setHeaderText("Unrecognized disc.");
+            ALERT.setContentText("This disc does not appear to belong to us."
+                    + " Ensure that you have entered the correct disc ID and that the"
+                    + " disc is correctly inserted.");
+            ALERT.show();
+            return;
+        }
+        
         double additionalCost = DiscHandler.acceptReturnedDisc(disc);
         
         if(additionalCost > 0) {
@@ -66,8 +77,7 @@ public class DiscReturnController implements Initializable {
            Movie movie = new Movie();
            movie.setRentalPrice(additionalCost);
            movie.setTitle("Extra Costs on borrowed movie");
-           MovieCartController.MOVIE_CART.clear();
-           MovieCartController.MOVIE_CART.add(movie);
+           MovieCartController.addToCart(movie);
            
            navigateToPayment();
            
@@ -76,9 +86,9 @@ public class DiscReturnController implements Initializable {
         
         else {
             ALERT.setAlertType(AlertType.INFORMATION);
-           ALERT.setHeaderText("Disc return successful");
-           ALERT.setContentText("You have successfully the disc. Thank you");
-           ALERT.show();
+            ALERT.setHeaderText("Disc return successful");
+            ALERT.setContentText("You have successfully the disc. Thank you");
+            ALERT.show();
         }
         
         

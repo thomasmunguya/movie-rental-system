@@ -237,7 +237,7 @@ public class PaymentController implements Initializable {
           ALERT.setAlertType(Alert.AlertType.ERROR);
           ALERT.setHeaderText("Invalid Payment Card.");
           ALERT.setContentText("Your payment card is either not valid or is not registered with Movie Rental"
-                  + " .Ensure that your card number is correct and that it is registered with"
+                  + " . Ensure that your card number is correct and that it is registered with"
                   + "with Movie Rental");
           ALERT.show();
           return;
@@ -277,12 +277,13 @@ public class PaymentController implements Initializable {
             
             ALERT.setAlertType(Alert.AlertType.INFORMATION);
             ALERT.setHeaderText("Payment Successful");
-            ALERT.setContentText("Your payment was successful. Please collect your disc(s) from the disc dispenser.");
+            ALERT.setContentText("Your payment was successful. Please collect your disc(s).");
             ALERT.show();
             
             Runnable mailDeliverer = () -> {
                 Mailer mailer = Mailer.getInstance();
                 try {
+                    
                     if(!user.getEmailAddress().equals("")) return;
                     
                     mailer.sendReceiptEmail(user.getEmailAddress(), receipt);
@@ -313,22 +314,22 @@ public class PaymentController implements Initializable {
         
         rental = new Rental();
         
+        user = new User();
+        user = (User) user.retrieveOne("payment_card_number", txtCardNumber.getText());
         
         Map<String, Double> cartItems = new HashMap<>();
         
-        MovieCartController.MOVIE_CART.forEach((movie) -> {
+        MovieCartController.getCart().forEach((movie) -> {
             
             cartItems.put(movie.getTitle(), movie.getRentalPrice());
             Disc disc = new Disc(movie.getDiscs().get(0).getId(), discTag);
             movie.getDiscs().remove(0);
             moviesToRent.add(movie);
             
-            user = new User();
-            
             rental.setDateRented(LocalDate.now());
             rental.setDisc(disc);
             rental.setRentalFee(movie.getRentalPrice());
-            rental.setUser((User) user.retrieveOne("payment_card_number", txtCardNumber.getText()));
+            rental.setUser(user);
             rental.setReceipt(receipt);
             
         });

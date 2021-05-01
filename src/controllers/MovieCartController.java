@@ -68,11 +68,18 @@ public class MovieCartController implements Initializable {
     @FXML
     private TableColumn<Movie, String> tcTotal;
     
-    public static final ObservableList<Movie> MOVIE_CART = FXCollections.observableArrayList();
+    private static final ObservableList<Movie> MOVIE_CART = FXCollections.observableArrayList();
+    
+    public static void addToCart(Movie movie) {
+        MOVIE_CART.add(movie);
+    }
+    
+    public static ObservableList<Movie> getCart() {
+        return MOVIE_CART;
+    }
     
     @Override
     public void initialize(URL location, ResourceBundle resources){
-        
         btnRemoveFromCart.setDisable(true);
         showMoviesInCart();
           
@@ -85,8 +92,7 @@ public class MovieCartController implements Initializable {
                   txtCartItemsNumber.setText("0 Item(s) in cart.");
           }));
            
-          tvMovieCart.itemsProperty().addListener((observable) -> {
-              System.out.println("I am here");
+          tvMovieCart.getSelectionModel().selectedItemProperty().addListener((observable) -> {
               if(tvMovieCart.getSelectionModel().getSelectedItems().isEmpty()) {
                   
                   btnRemoveFromCart.setDisable(true);
@@ -140,8 +146,6 @@ public class MovieCartController implements Initializable {
      */
     private void showMoviesInCart() {
         
-        System.out.println(MOVIE_CART.size());
-        
         tvMovieCart.setItems(MOVIE_CART);
         
         
@@ -151,49 +155,7 @@ public class MovieCartController implements Initializable {
         tcMovieTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         
         tcTotal.setCellValueFactory(new PropertyValueFactory<>("rentalPrice"));
-        
-////        int layoutX = 
-//        for(Movie movie: MOVIE_CART) {
-//            
-//            ImageView imgView = new ImageView(movie.getImage());
-//            imgView.setFitWidth(51);
-//            imgView.setFitHeight(68);
-//            
-//            Label lblMovieTitle = new Label(movie.getTitle());
-//            lblMovieTitle.setFont(new Font("Berlin Sans FB", 14));
-//            lblMovieTitle.setTextFill(Paint.valueOf("WHITE"));
-//            lblMovieTitle.setLayoutX(59);
-//            lblMovieTitle.setLayoutY(24);
-//            
-//            AnchorPane anchorPane1 = new AnchorPane();
-//            anchorPane1.setLayoutX(0);
-//            anchorPane1.setLayoutY(0);
-//            anchorPane1.getChildren().addAll(imgView, lblMovieTitle);
-//            
-//            
-//            Button btnRemoveFromCart = new Button("Remove From Cart");
-//            btnRemoveFromCart.setFont(new Font("System Bold", 11));
-//            btnRemoveFromCart.setTextFill(Paint.valueOf("WHITE"));
-//            btnRemoveFromCart.setLayoutX(404);
-//            btnRemoveFromCart.setLayoutY(17);
-//            btnRemoveFromCart.setPrefHeight(35);
-//            btnRemoveFromCart.setPrefWidth(120);
-//            btnRemoveFromCart.setStyle("-fx-background-color:  #ff3700;");
-//            
-//            AnchorPane anchorPane2 = new AnchorPane();
-//            anchorPane2.setLayoutX(0);
-//            anchorPane2.setLayoutY(0);
-//            anchorPane2.getChildren().addAll(anchorPane1, btnRemoveFromCart);
-//            
-//            AnchorPane anchorPane3 = new AnchorPane();
-//            anchorPane3.setLayoutX(14);
-//            anchorPane3.setLayoutY(105);
-//            anchorPane3.getChildren().add(anchorPane2);
-//            anchorPane3.setStyle("-fx-background-color:    #0080ff;");
-//            
-//            middlePane.getChildren().add(anchorPane3);
-            
-//        }
+     
     }
     
     @FXML

@@ -220,7 +220,6 @@ public class Movie implements Retrievable, Persistable {
      * @return a list of discs
      */
     private static List<Disc> retrieveDiscsAssignedToMovie(String movieId) {
-        System.out.println("Movie ID: " + movieId);
         final String QUERY = "SELECT * FROM disc LEFT JOIN movie_discs"
                 + " ON movie_discs.disc_id = disc.id WHERE movie_discs.movie_id = '" + movieId + "';";
         final List<Disc> discsAssignedToMovie = new ArrayList<>();
@@ -230,7 +229,6 @@ public class Movie implements Retrievable, Persistable {
             while(discsAssignedToMovieRS.next()) {
                 Disc disc = new Disc();
                 disc.setId(discsAssignedToMovieRS.getString("id"));
-                System.out.println("Disc ID: " + discsAssignedToMovieRS.getInt("id"));
                 disc.setDiscTag(retrieveDiscTag(discsAssignedToMovieRS.getInt("disc_tag_id")));
                 discsAssignedToMovie.add(disc);
             }
@@ -273,9 +271,9 @@ public class Movie implements Retrievable, Persistable {
             if(discTagsRS.next()) {
                 DiscTag discTag = new DiscTag();
                 discTag.setDateRented(LocalDate.parse(discTagsRS.getString("date_rented")));
-                discTag.setTimeRented(Instant.parse(discTagsRS.getString("time_rented")));
+                discTag.setTimeRented(LocalTime.parse(discTagsRS.getString("time_rented")));
                 discTag.setDateReturned(LocalDate.parse(discTagsRS.getString("date_returned")));
-                discTag.setTimeReturned(Instant.parse(discTagsRS.getString("time_returned")));
+                discTag.setTimeReturned(LocalTime.parse(discTagsRS.getString("time_returned")));
                 return discTag;
             }
         }catch(SQLException ex) {
@@ -311,20 +309,6 @@ public class Movie implements Retrievable, Persistable {
         return null;
     }
 
-    public static void main(String[] args) {
-//        for (Movie movie : Movie.retrieveAll()) {
-//            System.out.println("Title: " + movie.getTitle());
-//            System.out.println("Actors: " + movie.getActors());
-//            System.out.println("Director: " + movie.getDirector());
-//            System.out.println("Rating: " + movie.getRating());
-//            System.out.println("Length (Minutes): " + movie.getLengthInMinutes());
-//            System.out.println("Genre: " + movie.getGenre());
-//            System.out.println("Available: " + movie.isAvailable());
-//            System.out.println("Release date: " + movie.getReleaseDate());
-//            System.out.println("pathToImageView: " + movie.getPathToImageView());
-//        }
-
-    }
 
     @Override
     public Retrievable retrieveOne(String columnName, String columnValue) {
@@ -365,10 +349,12 @@ public class Movie implements Retrievable, Persistable {
                 + " '" + getDirector()+ "',"
                 + " '" + getRating() + "',"
                 + " '" + getLengthInMinutes() + "',"
-                + " " + getGenre() + "',"
+                + " '" + getGenre() + "',"
                 + " '" + isAvailable() + "',"
                 + " '" + getReleaseDate() +"',"
-                + " '" + getPathToImage() + "')"
+                + " '" + getPathToImage() + "',"
+                + " '" + getDescription() + "',"
+                + " '" + getRentalPrice() + "')"
                 + " ON DUPLICATE KEY UPDATE"
                 + " available = '" + isAvailable() + "';";
         try {

@@ -76,7 +76,7 @@ public class MovieDetailsController implements Initializable {
      * Navigates to the movie cart UI
      */
     public void navigateToMovieCart() throws IOException {
-        MovieCartController.MOVIE_CART.add(movie);
+        MovieCartController.addToCart(movie);
         AnchorPane movieCartrootPane = FXMLLoader.<AnchorPane>load(getClass().getResource("/ui/MovieCart.fxml"));
         Scene scene = new Scene(movieCartrootPane, 720, 600);
         Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -109,7 +109,7 @@ public class MovieDetailsController implements Initializable {
         txtReleaseDate.setText(movie.getReleaseDate().toString());
         txtTitle.setText(movie.getTitle());
         txtDirector.setText(movie.getDirector());
-        imgViewCover = movie.getImage();
+        imgViewCover.setImage(movie.getImage().getImage());
         txtDescription.setText(movie.getDescription());
         txtLength.setText(movie.getLengthInMinutes() + " min");
         txtRentalFee.setText("€" + movie.getRentalPrice() + "");

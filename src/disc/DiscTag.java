@@ -15,17 +15,17 @@ import java.time.*;
 public class DiscTag implements Retrievable, Persistable{
 
     private LocalDate dateRented;
-    private Instant timeRented;
+    private LocalTime timeRented;
     private LocalDate dateReturned;
-    private Instant timeReturned;
+    private LocalTime timeReturned;
     private String id;
 
     public DiscTag() {
     }
 
     
-    public DiscTag(LocalDate dateRented, Instant timeRented, LocalDate dateReturned,
-            Instant timeReturned, String id) {
+    public DiscTag(LocalDate dateRented, LocalTime timeRented, LocalDate dateReturned,
+            LocalTime timeReturned, String id) {
         this.dateRented = dateRented;
         this.timeRented = timeRented;
         this.dateReturned = dateReturned;
@@ -41,11 +41,11 @@ public class DiscTag implements Retrievable, Persistable{
         this.dateRented = dateRented;
     }
 
-    public Instant getTimeRented() {
+    public LocalTime getTimeRented() {
         return timeRented;
     }
 
-    public void setTimeRented(Instant timeRented) {
+    public void setTimeRented(LocalTime timeRented) {
         this.timeRented = timeRented;
     }
 
@@ -57,11 +57,11 @@ public class DiscTag implements Retrievable, Persistable{
         this.dateReturned = dateReturned;
     }
 
-    public Instant getTimeReturned() {
+    public LocalTime getTimeReturned() {
         return timeReturned;
     }
 
-    public void setTimeReturned(Instant timeReturned) {
+    public void setTimeReturned(LocalTime timeReturned) {
         this.timeReturned = timeReturned;
     }
 
@@ -84,9 +84,9 @@ public class DiscTag implements Retrievable, Persistable{
             if(discTagsRS.next()) {
                 DiscTag discTag = new DiscTag();
                 discTag.setDateRented(LocalDate.parse(discTagsRS.getString("date_rented")));
-                discTag.setTimeRented(Instant.parse(discTagsRS.getString("time_rented")));
+                discTag.setTimeRented(LocalTime.parse(discTagsRS.getString("time_rented")));
                 discTag.setDateReturned(LocalDate.parse(discTagsRS.getString("date_returned")));
-                discTag.setTimeReturned(Instant.parse(discTagsRS.getString("time_returned")));
+                discTag.setTimeReturned(LocalTime.parse(discTagsRS.getString("time_returned")));
                 discTag.setId(discTagsRS.getString("id"));
                 return discTag;
             }

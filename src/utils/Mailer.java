@@ -6,7 +6,6 @@
 package utils;
 
 import com.sun.mail.smtp.SMTPMessage;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import javax.mail.Message;
@@ -31,7 +30,7 @@ public class Mailer {
     private final String PASSWORD = "thomasThomas2424";
     private static Mailer mailer;
     
-    public Mailer() {
+    private Mailer() {
         
     }
     
@@ -47,7 +46,6 @@ public class Mailer {
         
         MimeBodyPart p1 = new MimeBodyPart();
 	Multipart mp = new MimeMultipart();
-//	MimeBodyPart imageBodyPart = new MimeBodyPart();
         
         try {
             mp.addBodyPart(p1);
@@ -88,20 +86,9 @@ public class Mailer {
             receiptSb.append(String.format("\t\t\tITEM: %s\t\t\t\tCOST: $%5.2f\n", movie, rentalPrice));
         });
         
-        
-        
-//        final File RECEIPT_HTML_FILE = new File("utils/receipt_html.txt");
-//        Scanner scanner = new Scanner(RECEIPT_HTML_FILE);
-//        StringBuilder receiptHTML = new StringBuilder();
-//        while(scanner.hasNextLine()) {
-//            receiptHTML.append(scanner.nextLine() + "\n");
-//        }
-        
         sendEmail(destinationEmail, receiptSb.toString());
         
     }
     
-    public static void main(String[] args) {
-    }
     
 }

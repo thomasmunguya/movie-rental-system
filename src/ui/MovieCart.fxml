@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MovieCartController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="720.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MovieCartController">
    <children>
       <SplitPane dividerPositions="0.202" orientation="VERTICAL" prefHeight="700.0" prefWidth="750.0" stylesheets="@movies.css">
          <items>
@@ -49,18 +49,18 @@
                               <Font size="13.0" />
                            </font>
                         </Button>
-                        <Text fx:id="txtCartItemsNumber" fill="WHITE" layoutX="14.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="135.9999999999999">
+                        <Text fx:id="txtCartItemsNumber" fill="WHITE" layoutX="-18.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="135.9999999999999">
                            <font>
                               <Font name="Berlin Sans FB" size="17.0" />
                            </font>
                         </Text>
                      </children>
                   </AnchorPane>
-                  <TableView fx:id="tvMovieCart" layoutX="19.0" layoutY="18.0" prefHeight="347.0" prefWidth="676.0" stylesheets="@../utils/newCascadeStyleSheet.css">
+                  <TableView fx:id="tvMovieCart" layoutX="19.0" layoutY="18.0" prefHeight="347.0" prefWidth="676.0" stylesheets="@../css/styles.css">
                     <columns>
                       <TableColumn fx:id="tcMovieCover" editable="false" prefWidth="238.0" resizable="false" sortable="false" text="Cover" />
                       <TableColumn fx:id="tcMovieTitle" editable="false" prefWidth="327.0" resizable="false" sortable="false" text="Movie Title" />
-                        <TableColumn fx:id="tcTotal" prefWidth="145.0" resizable="false" style="fx-background-color: #1d2740;" text="Total" />
+                        <TableColumn fx:id="tcTotal" prefWidth="145.0" resizable="false" text="Rental Fee" />
                     </columns>
                   </TableView>
                </children>

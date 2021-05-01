@@ -1,7 +1,6 @@
 package controllers;
 
 import java.io.IOException;
-import static java.lang.Integer.min;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.*;
@@ -11,14 +10,11 @@ import javafx.scene.image.*;
 import main.Movie;
 import javafx.scene.text.*;
 import java.util.*;
-import static java.util.stream.Collectors.toMap;
-import java.util.stream.IntStream;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Pagination;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 /**
  *
@@ -63,7 +59,7 @@ public class MovieListController implements Initializable {
     private Pagination paginationMovieList;
     
     @FXML
-    private AnchorPane movieListPane;
+    private ScrollPane movieListPane;
     
     private static List<Movie> movieList;
     
@@ -80,17 +76,7 @@ public class MovieListController implements Initializable {
      * @param endIndex the index (exclusive) at which to end loading the movies
      */
     private void loadMovies() {
-//       paginationMovieList.setLayoutX(100);
-//       paginationMovieList.setLayoutY(40);
-       paginationMovieList.setPageCount(movieList.size());
-        
-       paginationMovieList.setPageFactory(new Callback<Integer, Node>() {
-        public Node call(Integer pageIndex) {
-           return createMovieCoverPane(pageIndex);
-       }
-      });
-       
-            
+        movieListPane.setContent(createMovieCoverPane());
     }
    
     /**
@@ -124,35 +110,39 @@ public class MovieListController implements Initializable {
         stage.show();
     }
     
-    private HBox createMovieCoverPane(int index) {
+    private HBox createMovieCoverPane() {
         
            HBox movieCoversPane = new HBox(20);
            movieCoversPane.setPrefWidth(720);
-           movieCoversPane.setPrefHeight(500);
+           movieCoversPane.setPrefHeight(392);
+           movieCoversPane.setStyle("-fx-background-color:  #1d2740;");
            
-           for (int i = 0; i < index; i++) {
+           for (int i = 0; i < movieList.size(); i++) {
+               int[] index = new int[1];
+               index[0] = i;
                
-               ImageView imgViewMovieCover = movieList.get(index).getImage();
+               ImageView imgViewMovieCover = movieList.get(i).getImage();
                imgViewMovieCover.setFitWidth(205);
                imgViewMovieCover.setFitHeight(300);
                imgViewMovieCover.setSmooth(true);
                imgViewMovieCover.setLayoutX(200);
                imgViewMovieCover.setOnMouseReleased((event) -> {
                    try {
-                       navigateToMovieDetails(movieList.get(index));
+                       navigateToMovieDetails(movieList.get(index[0]));
                    } catch (IOException ex) {
                        ex.printStackTrace();
                    }
                });
                
       
-              Text txtMovieTitle = new Text(movieList.get(index).getTitle());
+              Text txtMovieTitle = new Text(movieList.get(i).getTitle());
               txtMovieTitle.setFont(Font.font("Berlin Sans FB", 14));
-              txtMovieTitle.setTextAlignment(TextAlignment.RIGHT);
+              txtMovieTitle.setTextAlignment(TextAlignment.LEFT);
               txtMovieTitle.setFill(Paint.valueOf("WHITE"));
-              txtMovieTitle.setWrappingWidth(300);
+              txtMovieTitle.setWrappingWidth(205);
 
               VBox vBoxCoverAndTitle = new VBox();
+              vBoxCoverAndTitle.setSpacing(5);
               vBoxCoverAndTitle.getChildren().addAll(imgViewMovieCover, txtMovieTitle);
               
               movieCoversPane.getChildren().add(vBoxCoverAndTitle);
