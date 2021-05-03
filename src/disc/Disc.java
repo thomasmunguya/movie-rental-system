@@ -56,7 +56,9 @@ public class Disc implements Retrievable {
         }catch(SQLException ex) {
             ex.printStackTrace();
         }
-        return null;
+        Disc disc = new Disc();
+        disc.setId("-1");
+        return disc;
     }
 
 }

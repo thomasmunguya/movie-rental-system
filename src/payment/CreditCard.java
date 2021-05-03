@@ -106,7 +106,9 @@ public class CreditCard extends PaymentCard {
         }catch(SQLException ex) {
             ex.printStackTrace();
         }
-        return null;
+        CreditCard creditCard = new CreditCard();
+        creditCard.setCardNumber("-1");
+        return creditCard;
     }
     
     

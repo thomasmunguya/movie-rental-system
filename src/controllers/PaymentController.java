@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package controllers;
 
 import disc.*;
@@ -91,6 +87,8 @@ public class PaymentController implements Initializable {
     
     private static User user;
     
+    private static boolean pinCancelled;
+    
     private static List<Movie> moviesToRent = new ArrayList<>();
     
     
@@ -101,6 +99,10 @@ public class PaymentController implements Initializable {
     
     public static void setPinAttemptsExhausted() {
         pinAttemptsExhausted = true;
+    }
+    
+    public static void setPinCancelled(boolean pinCancelled) {
+        PaymentController.pinCancelled = pinCancelled;
     }
     
     /**
@@ -196,11 +198,12 @@ public class PaymentController implements Initializable {
      *@throws IOException passed on from the showPinRequestWindow() method
      */
     public void processPayment() throws IOException {
-        
-        PaymentCard paymentCard = null;
-        PaymentCard retrievedCard = null;
-        
         String cardNumber = txtCardNumber.getText();
+        
+        PaymentCard paymentCard = new CreditCard();
+        paymentCard = (CreditCard) paymentCard.retrieveOne("card_number", txtCardNumber.getText());
+        
+        PaymentCard retrievedCard;
         
         //if the card has been blocked because the user entered a wrong PIN three times,
         //block the card from making payments
@@ -212,36 +215,35 @@ public class PaymentController implements Initializable {
             return;
         }
         
-        //obtain the card type
-        PaymentCardType cardType = PaymentCard.retrievePaymentCardType(cardNumber);
-        
-         
         
         //if the card type is a credit card then instatiate a credit card
-        if(cardType != null && cardType.equals(PaymentCardType.CREDIT_CARD)) {
-            paymentCard = new CreditCard();
+        if(!paymentCard.getCardNumber().equals("-1")) {
             paymentCard.setCardNumber(cardNumber);
-            retrievedCard = (CreditCard) paymentCard.retrieveOne("card_number", cardNumber);
+            retrievedCard = (CreditCard) paymentCard;
             PinRequestController.setPin(retrievedCard.getPin());
         }
         
         //if its a debit card then instantiate a debit card
-        else if(cardType != null && cardType.equals(PaymentCardType.DEBIT_CARD)) {
+        else {
             paymentCard = new DebitCard();
             paymentCard.setCardNumber(cardNumber);
             retrievedCard = (DebitCard) paymentCard.retrieveOne("card_number", cardNumber);
             PinRequestController.setPin(retrievedCard.getPin());
         }
         
-        if(retrievedCard == null || !PaymentCard.isValidCard(paymentCard)) {
-          ALERT.setAlertType(Alert.AlertType.ERROR);
-          ALERT.setHeaderText("Invalid Payment Card.");
-          ALERT.setContentText("Your payment card is either not valid or is not registered with Movie Rental"
-                  + " . Ensure that your card number is correct and that it is registered with"
-                  + "with Movie Rental");
-          ALERT.show();
-          return;
+        if(!PaymentCard.isValidCard(paymentCard)) {
+            ALERT.setAlertType(Alert.AlertType.ERROR);
+            ALERT.setHeaderText("Invalid Payment Card.");
+            ALERT.setContentText("Your payment card is either not valid or is not registered with Movie Rental"
+                    + " . Ensure that your card number is correct and that it is registered with"
+                    + "with Movie Rental");
+            ALERT.show();
+            return;
+        } else {
         }
+        
+        System.out.println("Retrieved Card PIN" + retrievedCard.getPin());
+        PinRequestController.setPin(retrievedCard.getPin());
         
         //request for PIN before making a payment
         showPinRequestWindow();
@@ -249,6 +251,11 @@ public class PaymentController implements Initializable {
         //if a wrong PIN has been entered three times, add the card number to the list of blocked card numbers
         if(pinAttemptsExhausted) {
             blockedCardNumbers.add(cardNumber);
+            return;
+        }
+        
+        //if entry of PIN was cancelled don't do anything
+        if(pinCancelled) {
             return;
         }
         
@@ -277,14 +284,16 @@ public class PaymentController implements Initializable {
             
             ALERT.setAlertType(Alert.AlertType.INFORMATION);
             ALERT.setHeaderText("Payment Successful");
-            ALERT.setContentText("Your payment was successful. Please collect your disc(s).");
+            ALERT.setContentText("Your payment was successful. "
+                    + "A receipt has been sent to your email (if you registered your email address)."
+                    + " Please collect your disc(s).");
             ALERT.show();
             
             Runnable mailDeliverer = () -> {
                 Mailer mailer = Mailer.getInstance();
                 try {
                     
-                    if(!user.getEmailAddress().equals("")) return;
+                    if(user.getEmailAddress().equals("")) return;
                     
                     mailer.sendReceiptEmail(user.getEmailAddress(), receipt);
                         

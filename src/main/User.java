@@ -3,7 +3,6 @@ package main;
 import database.*;
 import static database.DatabaseAccessor.CONNECTION;
 import java.sql.*;
-import java.util.*;
 import payment.*;
 
 /**
@@ -80,10 +79,15 @@ public class User implements Persistable, Retrievable {
 
     @Override
     public boolean persist() {
-        final String QUERY = "INSERT INTO user VALUES('" + getEmailAddress() + "','" + getPaymentCard().getCardNumber() + "');";
+        final String QUERY = "INSERT INTO user VALUES('" + getEmailAddress() + "','" + getPaymentCard().getCardNumber() + "')"
+                + "ON DUPLICATE KEY UPDATE payment_card_number = '" + getPaymentCard().getCardNumber() + "';";
+        final String QUERY2 = "INSERT INTO user_payment_cards VALUES('" + getEmailAddress() + "',"
+                + " '" + getPaymentCard().getCardNumber() + "') ON DUPLICATE KEY UPDATE user_email_address = "
+                + "'" + getEmailAddress() + "', payment_card_number = '" + getPaymentCard().getCardNumber() + "';";
         try {
             Statement statement = CONNECTION.createStatement();
             statement.executeUpdate(QUERY);
+            statement.executeUpdate(QUERY2);
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -101,18 +105,15 @@ public class User implements Persistable, Retrievable {
             if(retrievedUserRS.next()) {
                 User user = new User();
                 user.setEmailAddress(retrievedUserRS.getString("email_address"));
-                if(PaymentCard.retrievePaymentCardType(retrievedUserRS.
-                        getString("payment_card_number")).equals(PaymentCardType
-                                .CREDIT_CARD.toString())) {
-                    CreditCard cCard = new CreditCard();
-                    cCard.setCardNumber(retrievedUserRS.getString("payment_card_number"));
-                    cCard = (CreditCard) cCard.retrieveOne("card_number",
-                            retrievedUserRS.getString("payment_card_number"));
+                
+                CreditCard cCard = new CreditCard();
+                cCard.setCardNumber(retrievedUserRS.getString("payment_card_number"));
+                cCard = (CreditCard) cCard.retrieveOne("card_number",
+                retrievedUserRS.getString("payment_card_number"));
+                if(!cCard.getCardNumber().equals("-1")) {
                     user.setPaymentCard(cCard);
                     return user;
-                } else if(PaymentCard.retrievePaymentCardType(retrievedUserRS.
-                        getString("payment_card_number")).equals(PaymentCardType
-                                .DEBIT_CARD.toString())) {
+                } else {
                     DebitCard dCard = new DebitCard();
                     dCard.setCardNumber(retrievedUserRS.getString("payment_card_number"));
                     dCard = (DebitCard) dCard.retrieveOne("card_number",

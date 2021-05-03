@@ -40,6 +40,7 @@ public class PinRequestController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         
         btnOK.setOnAction((event) -> {
+            PaymentController.setPinCancelled(false);
             if(pin.equals(pfPin.getText())) {
                 Stage stage = (Stage) rootPane.getScene().getWindow();
                 stage.close();
@@ -64,6 +65,7 @@ public class PinRequestController implements Initializable {
         });
         
          btnCancel.setOnAction((event) -> {
+             PaymentController.setPinCancelled(true);
             Stage stage = (Stage) rootPane.getScene().getWindow();
             stage.close();
         });

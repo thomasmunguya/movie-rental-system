@@ -67,6 +67,7 @@ public class MovieListController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources){
           movieList = Movie.retrieveAll();
+          Collections.shuffle(movieList);
           loadMovies();
     }
     

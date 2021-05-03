@@ -16,7 +16,6 @@ public abstract class PaymentCard implements Persistable, Retrievable {
     private String expiryDate;
     private String pin;
     private double balance;
-    private PaymentCardType cardType;
 
     public PaymentCard() {
 
@@ -70,13 +69,6 @@ public abstract class PaymentCard implements Persistable, Retrievable {
         this.balance = balance;
     }
     
-    public PaymentCardType getCardType() {
-        return this.cardType;
-    }
-    
-    public void setCardType(PaymentCardType cardType) {
-        this.cardType = cardType;
-    }
 
     /**
      * Releases funds from the payment card
@@ -113,10 +105,6 @@ public abstract class PaymentCard implements Persistable, Retrievable {
         return false;
     }
 
-    @Override
-    public boolean persist() {
-        return false;
-    }
 
     @Override
     public boolean equals(Object other) {
@@ -132,28 +120,7 @@ public abstract class PaymentCard implements Persistable, Retrievable {
             return false;
         }
 
-        if(this.getCardNumber() != ((PaymentCard) other).getCardNumber()) {
-            return false;
-        }
-
-        return true;
+        return this.getCardNumber().equals(((PaymentCard) other).getCardNumber());
     }
     
-    /**
-     * Retrieves the card type associated with a card number from the database
-     */
-    public static PaymentCardType retrievePaymentCardType(String cardNumber) {
-        final String QUERY = "SELECT payment_card_type FROM user_payment_cards WHERE payment_card_number" 
-                + " = '" + cardNumber + "';";
-        try {
-            Statement statement = CONNECTION.createStatement();
-            ResultSet retrievedCardTypeRS = statement.executeQuery(QUERY);
-            if(retrievedCardTypeRS.next()) {
-                return PaymentCardType.valueOf(retrievedCardTypeRS.getString("payment_card_type"));
-            }
-        }catch(SQLException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
 }

@@ -10,11 +10,11 @@ public class Database {
     //the Database instance
     private static Database databaseHandler;
     //the URL to the database in the form jdbc:mysql://hostname:port/databasename
-    private final String DB_URL = "jdbc:mysql://localhost:3306/xtra_vision";
+    private final String DB_URL = "jdbc:mysql://hostname/databasename";
     //the password to the database
-    private static final String PASSWORD = "thebestdamnthingever2!";
+    private static final String PASSWORD = "password";
     //the database user name
-    private static final String USER_NAME = "root";
+    private static final String USER_NAME = "username";
 
     private Database() {
     }

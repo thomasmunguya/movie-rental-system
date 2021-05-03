@@ -55,7 +55,7 @@ public class DiscReturnController implements Initializable {
         disc.setId(tfDiscId.getText());
         disc = (Disc) disc.retrieveOne("id", disc.getId());
         
-        if(disc.getDiscTag() == null) {
+        if(disc.getId().equals("-1")) {
             ALERT.setAlertType(AlertType.ERROR);
             ALERT.setHeaderText("Unrecognized disc.");
             ALERT.setContentText("This disc does not appear to belong to us."

@@ -43,14 +43,14 @@ public class DebitCard extends PaymentCard {
         final List<DebitCard> retrievedDebitCards = new ArrayList<>();
         try {
             Statement statement = CONNECTION.createStatement();
-            ResultSet retrievedCCardRS = statement.executeQuery(QUERY);
-            while(retrievedCCardRS.next()) {
+            ResultSet retrievedDCardRS = statement.executeQuery(QUERY);
+            while(retrievedDCardRS.next()) {
                 DebitCard debitCard = new DebitCard();
-                debitCard.setCardNumber(retrievedCCardRS.getString("card_number"));
-                debitCard.setCardName(retrievedCCardRS.getString("card_name"));
-                debitCard.setBalance(retrievedCCardRS.getDouble("balance"));
-                debitCard.setExpiryDate(retrievedCCardRS.getString("expiry_date"));
-                debitCard.setPin(retrievedCCardRS.getString("pin"));
+                debitCard.setCardNumber(retrievedDCardRS.getString("card_number"));
+                debitCard.setCardName(retrievedDCardRS.getString("card_name"));
+                debitCard.setBalance(retrievedDCardRS.getDouble("balance"));
+                debitCard.setExpiryDate(retrievedDCardRS.getString("expiry_date"));
+                debitCard.setPin(retrievedDCardRS.getString("pin"));
                 retrievedDebitCards.add(debitCard);
             }
         }catch(SQLException ex) {
@@ -65,20 +65,22 @@ public class DebitCard extends PaymentCard {
                 " = '" + columnValue + "';";
         try {
             Statement statement = CONNECTION.createStatement();
-            ResultSet retrievedCCardRS = statement.executeQuery(QUERY);
-            if(retrievedCCardRS.next()) {
+            ResultSet retrievedDCardRS = statement.executeQuery(QUERY);
+            if(retrievedDCardRS.next()) {
                 DebitCard debitCard = new DebitCard();
-                debitCard.setCardNumber(retrievedCCardRS.getString("card_number"));
-                debitCard.setCardName(retrievedCCardRS.getString("card_name"));
-                debitCard.setBalance(retrievedCCardRS.getDouble("balance"));
-                debitCard.setExpiryDate(retrievedCCardRS.getString("expiry_date"));
-                debitCard.setPin(retrievedCCardRS.getString("pin"));
+                debitCard.setCardNumber(retrievedDCardRS.getString("card_number"));
+                debitCard.setCardName(retrievedDCardRS.getString("card_name"));
+                debitCard.setBalance(retrievedDCardRS.getDouble("balance"));
+                debitCard.setExpiryDate(retrievedDCardRS.getString("expiry_date"));
+                debitCard.setPin(retrievedDCardRS.getString("pin"));
                 return debitCard;
             }
         }catch(SQLException ex) {
             ex.printStackTrace();
         }
-        return null;
+        DebitCard debitCard = new DebitCard();
+        debitCard.setCardNumber("-1");
+        return debitCard;
     }
     
     @Override
